@@ -1,11 +1,20 @@
 import Image from "next/image";
 import { banner_1 } from "@/images";
 import Link from "next/link";
-import { ShoppingBag, Star, TrendingUp, Zap } from "lucide-react";
+import {
+  MessageCircle,
+  Star,
+  TrendingUp,
+  Zap,
+  Wrench,
+} from "lucide-react";
 import Container from "./Container";
 import Title from "./Title";
 
 const HomeBanner = async () => {
+  const whatsappUrl =
+    "https://wa.me/258841212412?text=Ol%C3%A1!%20Gostaria%20de%20pedir%20um%20or%C3%A7amento.";
+
   return (
     <div className="overflow-hidden">
       <div className="relative py-8 md:py-12 bg-gradient-to-br from-shop_light_pink via-pink-50 to-orange-50 rounded-2xl shadow-2xl">
@@ -26,7 +35,7 @@ const HomeBanner = async () => {
                 <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-white/20 animate-fadeInUp">
                   <Zap className="w-4 h-4 text-orange-500 animate-pulse" />
                   <span className="text-sm font-semibold text-shop_dark_green">
-                    Limited Time Offer
+                    Orçamento Grátis
                   </span>
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-ping"></div>
                 </div>
@@ -35,12 +44,12 @@ const HomeBanner = async () => {
               {/* Main Title */}
               <div className="space-y-4">
                 <Title className="text-shop_dark_green font-bold text-4xl sm:text-5xl leading-tight animate-fadeInUp delay-200">
-                  <span className="block">Grab Up to</span>
+                  <span className="block">Soluções Técnicas</span>
                   <span className="block bg-gradient-to-r from-shop_light_green to-shop_dark_green bg-clip-text text-transparent animate-shimmer">
-                    50% Off
+                    Profissionais
                   </span>
                   <span className="block text-2xl font-medium text-gray-700">
-                    on Selected Headphones
+                    Refrigeração • Segurança • Starlink
                   </span>
                 </Title>
               </div>
@@ -50,17 +59,17 @@ const HomeBanner = async () => {
                 {[
                   {
                     icon: Star,
-                    text: "Premium Quality",
+                    text: "Técnicos Certificados",
                     color: "text-yellow-500",
                   },
                   {
                     icon: TrendingUp,
-                    text: "Best Deals",
+                    text: "Atendimento Rápido",
                     color: "text-green-500",
                   },
                   {
-                    icon: ShoppingBag,
-                    text: "Free Shipping",
+                    icon: MessageCircle,
+                    text: "Orçamento Grátis",
                     color: "text-blue-500",
                   },
                 ].map((feature, index) => (
@@ -78,33 +87,35 @@ const HomeBanner = async () => {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fadeInUp delay-600">
-                <Link
-                  href="/shop"
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group relative inline-flex items-center gap-3 bg-gradient-to-r from-shop_dark_green to-shop_light_green text-white px-8 py-4 rounded-xl text-base font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 overflow-hidden"
                 >
                   <span className="absolute inset-0 bg-gradient-to-r from-shop_light_green to-shop_dark_green opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   <span className="relative z-10 flex items-center gap-3">
-                    <ShoppingBag className="w-5 h-5 group-hover:animate-bounce" />
-                    Shop Now
+                    <MessageCircle className="w-5 h-5 group-hover:animate-bounce" />
+                    Falar no WhatsApp
                   </span>
                   <div className="absolute inset-0 -top-40 -left-10 bg-white/20 w-6 h-40 rotate-12 group-hover:left-full transition-all duration-700"></div>
-                </Link>
+                </a>
 
                 <Link
-                  href="/deal"
+                  href="/shop"
                   className="group inline-flex items-center gap-3 bg-white/80 backdrop-blur-sm text-shop_dark_green px-8 py-4 rounded-xl text-base font-semibold shadow-md hover:shadow-lg border-2 border-shop_dark_green/20 hover:border-shop_dark_green/40 transform hover:-translate-y-1 transition-all duration-300"
                 >
-                  <Zap className="w-5 h-5 group-hover:animate-pulse text-orange-500" />
-                  View Deals
+                  <Wrench className="w-5 h-5 group-hover:animate-pulse text-orange-500" />
+                  Ver Serviços
                 </Link>
               </div>
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6 pt-8 animate-fadeInUp delay-800">
                 {[
-                  { value: "50K+", label: "Happy Customers" },
-                  { value: "4.9★", label: "Customer Rating" },
-                  { value: "24/7", label: "Support" },
+                  { value: "500+", label: "Clientes Satisfeitos" },
+                  { value: "4.9★", label: "Avaliação Média" },
+                  { value: "24/7", label: "Suporte" },
                 ].map((stat, index) => (
                   <div key={index} className="text-center">
                     <div className="text-2xl sm:text-3xl font-bold text-shop_dark_green">
@@ -127,7 +138,7 @@ const HomeBanner = async () => {
                 {/* Main Image */}
                 <Image
                   src={banner_1}
-                  alt="Premium Headphones"
+                  alt="E.D.S TECH - Serviços Técnicos"
                   className="relative z-10 w-80 sm:w-96 lg:w-[400px] xl:w-[480px] drop-shadow-2xl transform hover:scale-105 transition-transform duration-500"
                   priority
                 />
@@ -138,7 +149,7 @@ const HomeBanner = async () => {
                 </div>
 
                 <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-shop_light_green to-shop_dark_green rounded-full flex items-center justify-center shadow-lg animate-bounce delay-1000">
-                  <span className="text-white font-bold text-sm">50%</span>
+                  <Wrench className="w-6 h-6 text-white" />
                 </div>
               </div>
             </div>

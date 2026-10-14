@@ -1,33 +1,37 @@
 "use client";
 
-import { SignIn } from "@clerk/nextjs";
+import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import Link from "next/link";
 import Logo from "@/components/common/Logo";
-import { ArrowLeft, Shield, Users, Star } from "lucide-react";
+import { ArrowLeft, Shield, Lock, UserCheck } from "lucide-react";
 import { contactConfig } from "@/config/contact";
 import Container from "@/components/Container";
-import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
+
+// ✅ Importa o Clerk apenas no cliente, sem SSR
+const SignIn = dynamic(
+  () => import("@clerk/nextjs").then((mod) => mod.SignIn),
+  { ssr: false }
+);
 
 const SignInPage = () => {
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo");
-
   const features = [
     {
       icon: Shield,
-      title: "Secure Authentication",
-      description: "Your data is protected with enterprise-grade security",
+      title: "Acesso Seguro",
+      description:
+        "Os seus dados são protegidos com segurança de nível empresarial",
     },
     {
-      icon: Users,
-      title: "Trusted by Thousands",
-      description: "Join our community of satisfied customers",
+      icon: Lock,
+      title: "Área Restrita",
+      description: "Apenas administradores autorizados têm acesso",
     },
     {
-      icon: Star,
-      title: "Premium Experience",
-      description: "Access exclusive deals and personalized recommendations",
+      icon: UserCheck,
+      title: "Gestão Total",
+      description: "Gerir produtos, categorias e conteúdo do site",
     },
   ];
 
@@ -35,7 +39,7 @@ const SignInPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-shop_light_green/5 via-shop_light_bg to-shop_light_pink/50 relative overflow-hidden">
       <Container>
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(59,156,60,0.1)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(251,108,8,0.08)_0%,transparent_50%),radial-gradient(circle_at_40%_40%,rgba(252,240,228,0.3)_0%,transparent_50%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(29,43,100,0.1)_0%,transparent_50%),radial-gradient(circle_at_80%_80%,rgba(230,57,70,0.08)_0%,transparent_50%),radial-gradient(circle_at_40%_40%,rgba(240,242,250,0.3)_0%,transparent_50%)]"></div>
 
         {/* Header */}
         <header className="relative z-10 px-4 sm:px-6 lg:px-8 py-6">
@@ -45,7 +49,7 @@ const SignInPage = () => {
               className="flex items-center gap-2 text-shop_dark_green hover:text-shop_light_green transition-colors duration-200 font-medium"
             >
               <ArrowLeft className="w-5 h-5" />
-              <span className="font-medium">Back to Home</span>
+              <span className="font-medium">Voltar à Home</span>
             </Link>
             <Logo />
           </div>
@@ -66,12 +70,12 @@ const SignInPage = () => {
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-shop_dark_green mb-4">
-                  Welcome Back!
+                  Área de Administração
                 </h1>
                 <p className="text-lg text-dark-text mb-8 leading-relaxed">
-                  Sign in to access your account, track orders, and enjoy
-                  personalized shopping experiences at{" "}
-                  {contactConfig.company.name}.
+                  Inicie sessão para gerir o conteúdo de{" "}
+                  {contactConfig.company.name}. Esta área é reservada à equipa
+                  autorizada.
                 </p>
               </motion.div>
 
@@ -108,7 +112,7 @@ const SignInPage = () => {
                 className="mt-8 p-6 bg-white/80 backdrop-blur-sm rounded-xl border border-shop_light_green/20 shadow-sm"
               >
                 <p className="text-sm text-dark-text">
-                  Need help? Contact our support team at{" "}
+                  Precisa de ajuda? Contacte-nos através de{" "}
                   <a
                     href={`mailto:${contactConfig.emails.support}`}
                     className="text-shop_light_green hover:text-shop_dark_green font-medium transition-colors duration-200"
@@ -121,34 +125,22 @@ const SignInPage = () => {
           </motion.div>
 
           {/* Right Side - Sign In Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 lg:py-12"
-          >
+          <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
             <div className="w-full max-w-md">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100/50 p-8"
-              >
+              <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-gray-100/50 p-8">
                 {/* Clerk Sign In Component */}
                 <div className="clerk-sign-in">
-                  <SignIn
-                    signUpUrl={`/sign-up${
-                      redirectTo
-                        ? `?redirectTo=${encodeURIComponent(redirectTo)}`
-                        : ""
-                    }`}
-                    forceRedirectUrl={redirectTo || "/user/dashboard"}
-                    fallbackRedirectUrl={redirectTo || "/user/dashboard"}
-                  />
+                  <Suspense fallback={<div className="text-center py-8 text-gray-500">A carregar...</div>}>
+                    <SignIn
+                      signUpUrl="/sign-up"
+                      forceRedirectUrl="/studio"
+                      fallbackRedirectUrl="/studio"
+                    />
+                  </Suspense>
                 </div>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </Container>
     </div>

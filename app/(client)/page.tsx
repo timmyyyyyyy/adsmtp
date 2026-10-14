@@ -2,7 +2,6 @@ import HomeCategories from "@/components/HomeCategories";
 import LatestBlog from "@/components/LatestBlog";
 import HomeBanner from "@/components/HomeBanner";
 import ProductGrid from "@/components/ProductGrid";
-import ShopByBrands from "@/components/ShopByBrands";
 import ShopFeatures from "@/components/ShopFeatures";
 import { getCategories } from "@/sanity/queries";
 import { generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo";
@@ -35,7 +34,6 @@ export default async function Home() {
         <ProductGrid />
         <HomeCategories categories={categories} />
         <ShopFeatures />
-        <ShopByBrands />
         <LatestBlog />
       </div>
     </div>

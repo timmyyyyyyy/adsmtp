@@ -9,11 +9,11 @@ All contact-related configuration is stored in the `.env` file. Here are the ava
 ### Company Information
 
 ```bash
-NEXT_PUBLIC_COMPANY_NAME=ShopCart                          # Your company name
-NEXT_PUBLIC_COMPANY_EMAIL=support@shopcart.com             # Main company email
-NEXT_PUBLIC_COMPANY_PHONE=+1 (555) 123-4567              # Main phone number
-NEXT_PUBLIC_COMPANY_ADDRESS=123 Shopping Street, Commerce District  # Street address
-NEXT_PUBLIC_COMPANY_CITY=New York, NY 10001, USA          # City, state, country
+NEXT_PUBLIC_COMPANY_NAME=E.D.S-Tech                         # Your company name
+NEXT_PUBLIC_COMPANY_EMAIL=edstechnology@tvcabo.co.mz             # Main company email
+NEXT_PUBLIC_COMPANY_PHONE=+258 (8412) 12-412              # Main phone number
+NEXT_PUBLIC_COMPANY_ADDRESS=Av das Industrias Numero 5006  # Street address
+NEXT_PUBLIC_COMPANY_CITY=Av da liberdade, 323, Matola, MZ        # City, state, country
 NEXT_PUBLIC_COMPANY_DESCRIPTION=Your company description   # Company description for footer
 ```
 

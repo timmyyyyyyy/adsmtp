@@ -13,25 +13,21 @@ const NewsletterForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Reset message
     setMessage(null);
 
-    // Basic validation
     if (!email.trim()) {
       setMessage({
         type: "error",
-        text: "Please enter your email address",
+        text: "Digite o seu e-mail",
       });
       return;
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setMessage({
         type: "error",
-        text: "Please enter a valid email address",
+        text: "Por favor, introduza um e-mail válido",
       });
       return;
     }
@@ -54,30 +50,29 @@ const NewsletterForm = () => {
           type: "success",
           text:
             data.message ||
-            "Thank you for subscribing! Check your email for a welcome message.",
+            "Obrigado por subscrever! Verifique o seu e-mail para a mensagem de boas-vindas.",
         });
-        setEmail(""); // Clear input on success
+        setEmail("");
       } else {
-        // Check if already subscribed
         if (data.alreadySubscribed) {
           setMessage({
             type: "info",
             text:
               data.error ||
-              "You're already subscribed to our newsletter! Check your inbox for our latest updates.",
+              "Já está subscrito à nossa newsletter! Verifique a sua caixa de entrada.",
           });
         } else {
           setMessage({
             type: "error",
-            text: data.error || "Failed to subscribe. Please try again.",
+            text: data.error || "Falha ao subscrever. Tente novamente.",
           });
         }
       }
     } catch (error) {
-      console.error("Newsletter subscription error:", error);
+      console.error("Erro na subscrição da newsletter:", error);
       setMessage({
         type: "error",
-        text: "Something went wrong. Please try again later.",
+        text: "Algo correu mal. Tente novamente mais tarde.",
       });
     } finally {
       setIsLoading(false);
@@ -89,37 +84,36 @@ const NewsletterForm = () => {
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
           type="email"
-          placeholder="Enter your email"
+          placeholder="Digite o seu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={isLoading}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-shop_dark_green focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all"
+          className="w-full px-4 py-2.5 bg-white text-[#2d2a7d] placeholder-gray-400 border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fbbf24] focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed transition-all"
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#2d2a7d] font-bold px-4 py-2.5 rounded-lg transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
-              Subscribing...
+              A subscrever...
             </>
           ) : (
-            "Subscribe"
+            "Subscrever"
           )}
         </button>
       </form>
 
-      {/* Message Display */}
       {message && (
         <div
           className={`p-3 rounded-lg text-sm flex items-start gap-2 animate-in fade-in slide-in-from-top-2 duration-300 ${
             message.type === "success"
-              ? "bg-green-50 text-green-800 border border-green-200"
+              ? "bg-green-100 text-green-800 border border-green-300"
               : message.type === "info"
-              ? "bg-blue-50 text-blue-800 border border-blue-200"
-              : "bg-red-50 text-red-800 border border-red-200"
+              ? "bg-blue-100 text-blue-800 border border-blue-300"
+              : "bg-red-100 text-red-800 border border-red-300"
           }`}
         >
           {message.type === "success" && (

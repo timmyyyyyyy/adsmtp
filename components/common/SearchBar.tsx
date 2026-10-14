@@ -9,7 +9,6 @@ import { Product } from "@/sanity.types";
 import PriceView from "../PriceView";
 import Image from "next/image";
 import Link from "next/link";
-import Logo from "./Logo";
 import { useOutsideClick } from "@/hooks";
 
 const SearchBar = () => {
@@ -22,7 +21,6 @@ const SearchBar = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useOutsideClick<HTMLDivElement>(() => setShowSearch(false));
 
-  // Detect if user is on Mac
   useEffect(() => {
     setIsMac(navigator.platform.toUpperCase().indexOf("MAC") >= 0);
   }, []);
@@ -33,43 +31,35 @@ const SearchBar = () => {
       const response = await client.fetch(query);
       setFeaturedProduct(response);
     } catch (error) {
-      console.error("Error fetching featured products:", error);
+      console.error("Erro ao carregar produtos em destaque:", error);
     }
   }, []);
 
   useEffect(() => {
     if (showSearch === true) {
       fetchFeaturedProducts();
-      // Focus input when modal opens
       const timeoutId = setTimeout(() => {
         inputRef.current?.focus();
       }, 100);
-
-      return () => clearTimeout(timeoutId); // Cleanup timeout
+      return () => clearTimeout(timeoutId);
     }
   }, [showSearch, fetchFeaturedProducts]);
 
-  // Handle escape key to close modal and Ctrl+K to open modal
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
-      // Handle Escape key to close modal
       if (e.key === "Escape" && showSearch) {
         setShowSearch(false);
         return;
       }
-
-      // Handle Ctrl+K (or Cmd+K on Mac) to open search modal
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
-        e.preventDefault(); // Prevent browser's default search behavior
+        e.preventDefault();
         setShowSearch(true);
         return;
       }
     };
 
-    // Always listen for global keyboard shortcuts
     document.addEventListener("keydown", handleKeydown);
 
-    // Handle body scroll lock only when modal is open
     if (showSearch) {
       document.body.style.overflow = "hidden";
     } else {
@@ -82,7 +72,6 @@ const SearchBar = () => {
     };
   }, [showSearch]);
 
-  // Fetch products from Sanity based on search input
   const fetchProducts = useCallback(async () => {
     if (!search) {
       setProducts([]);
@@ -96,81 +85,61 @@ const SearchBar = () => {
       const response = await client.fetch(query, params);
       setProducts(response);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("Erro ao pesquisar produtos:", error);
     } finally {
       setLoading(false);
     }
   }, [search]);
 
-  // Debounce input changes to reduce API calls
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       fetchProducts();
-    }, 300); // Delay of 300ms
-
-    return () => clearTimeout(debounceTimer); // Cleanup the timer
+    }, 300);
+    return () => clearTimeout(debounceTimer);
   }, [fetchProducts]);
+
   return (
     <>
-      {/* Search Trigger Button - Modern Input Style */}
-      <div className="flex">
-        {/* Desktop Version - Full Input Style */}
-        <button
-          onClick={() => setShowSearch(true)}
-          className="group hidden sm:flex items-center gap-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-shop_light_green rounded-lg px-3 py-2 transition-all duration-200 min-w-[200px] md:min-w-[240px]"
-          aria-label={`Open search (${isMac ? "Cmd" : "Ctrl"}+K)`}
-        >
-          {/* Search Icon */}
-          <Search className="w-4 h-4 text-gray-400 group-hover:text-shop_dark_green transition-colors duration-200 flex-shrink-0" />
+      {/* Botão que abre o modal — agora estilo azul E.D.S */}
+      <button
+        onClick={() => setShowSearch(true)}
+        className="group w-full flex items-center gap-3 bg-white hover:bg-gray-50 rounded-full px-4 py-2.5 transition-all duration-200"
+        aria-label={`Abrir pesquisa (${isMac ? "Cmd" : "Ctrl"}+K)`}
+      >
+        <Search className="w-4 h-4 text-gray-400 group-hover:text-[#2d2a7d] transition-colors flex-shrink-0" />
+        <span className="text-sm text-gray-500 group-hover:text-[#2d2a7d] transition-colors flex-1 text-left">
+          Pesquisar produtos...
+        </span>
+        <div className="hidden lg:flex items-center gap-1 bg-gray-100 px-2 py-1 rounded text-xs text-gray-500 font-mono flex-shrink-0">
+          <span>{isMac ? "⌘" : "Ctrl"}</span>
+          <span>K</span>
+        </div>
+      </button>
 
-          {/* Placeholder Text */}
-          <span className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors duration-200 flex-1 text-left">
-            Search products...
-          </span>
-
-          {/* Keyboard Shortcut Badge */}
-          <div className="flex items-center gap-1 bg-white border border-gray-200 group-hover:border-gray-300 px-2 py-1 rounded text-xs text-gray-500 font-mono flex-shrink-0 transition-colors duration-200">
-            <span>{isMac ? "⌘" : "Ctrl"}</span>
-            <span>K</span>
-          </div>
-        </button>
-
-        {/* Mobile Version - Icon Only */}
-        <button
-          onClick={() => setShowSearch(true)}
-          className="group flex sm:hidden items-center justify-center p-2 bg-gray-50 hover:bg-gray-100 border border-gray-200 hover:border-shop_btn_dark_green rounded-lg hoverEffect"
-          aria-label="Open search"
-        >
-          <Search className="w-4 h-4 text-gray-400 group-hover:text-shop_dark_green transition-colors duration-200" />
-        </button>
-      </div>
-
-      {/* Search Modal Overlay */}
+      {/* Modal */}
       {showSearch && (
         <div
           className={`fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 px-4 search-modal-overlay ${
             showSearch ? "animate-fadeIn" : "animate-fadeOut"
           }`}
         >
-          {/* Backdrop */}
           <div className="absolute inset-0 w-full h-screen bg-black/60 backdrop-blur-sm" />
 
-          {/* Modal Content */}
           <div
             ref={modalRef}
             className={`relative w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden search-modal-content ${
               showSearch ? "animate-scaleIn" : "animate-scaleOut"
             }`}
           >
-            {/* Header */}
-            <div className="bg-gradient-to-r from-shop_dark_green to-shop_light_green p-6 text-white">
+            {/* Header do modal */}
+            <div className="bg-gradient-to-r from-[#2d2a7d] to-[#e30613] p-6 text-white">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="bg-white/20 p-2 rounded-full">
                     <Search className="w-5 h-5" />
                   </div>
                   <div className="flex items-center gap-3">
-                    <h2 className="text-xl font-bold">Search Products</h2>
+                    <h2 className="text-xl font-bold">Pesquisar Produtos</h2>
                     <div className="hidden sm:flex items-center gap-1 bg-white/10 px-2 py-1 rounded-md border border-white/20">
                       <span className="text-xs font-mono">
                         {isMac ? "Cmd" : "Ctrl"}
@@ -183,19 +152,17 @@ const SearchBar = () => {
                 <button
                   onClick={() => setShowSearch(false)}
                   className="p-2 hover:bg-white/20 rounded-full transition-colors duration-200"
-                  aria-label="Close search (Escape)"
-                  title="Close (Escape)"
+                  aria-label="Fechar pesquisa (Escape)"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Search Input */}
               <form className="relative" onSubmit={(e) => e.preventDefault()}>
                 <div className="relative">
                   <Input
                     ref={inputRef}
-                    placeholder="Search your favorite products..."
+                    placeholder="Pesquise os seus produtos..."
                     className="w-full pl-12 pr-16 py-4 text-lg bg-white/10 border-white/20 placeholder:text-white/70 text-white focus:bg-white/20 focus:border-white/40 rounded-xl"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
@@ -220,13 +187,13 @@ const SearchBar = () => {
               </form>
             </div>
 
-            {/* Content */}
+            {/* Conteúdo */}
             <div className="max-h-[60vh] min-h-[50vh] overflow-y-auto">
               {loading ? (
-                <div className="flex flex-col items-center justify-center py-16 text-shop_dark_green">
+                <div className="flex flex-col items-center justify-center py-16 text-[#2d2a7d]">
                   <Loader2 className="w-8 h-8 animate-spin mb-3" />
-                  <p className="text-lg font-semibold">Searching products...</p>
-                  <p className="text-sm text-gray-500">Please wait a moment</p>
+                  <p className="text-lg font-semibold">A pesquisar produtos...</p>
+                  <p className="text-sm text-gray-500">Por favor aguarde</p>
                 </div>
               ) : products?.length > 0 ? (
                 <div className="divide-y divide-gray-100">
@@ -239,14 +206,14 @@ const SearchBar = () => {
                         <Link
                           href={`/product/${product?.slug?.current}`}
                           onClick={() => setShowSearch(false)}
-                          className="relative h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-200 group-hover:border-shop_light_green transition-colors duration-200"
+                          className="relative h-16 w-16 sm:h-20 sm:w-20 flex-shrink-0 overflow-hidden rounded-xl border border-gray-200 group-hover:border-[#2d2a7d] transition-colors duration-200"
                         >
                           {product?.images && (
                             <Image
                               width={80}
                               height={80}
                               src={urlFor(product?.images[0]).url()}
-                              alt={product.name || "Product"}
+                              alt={product.name || "Produto"}
                               className={`object-cover w-full h-full group-hover:scale-105 transition-transform duration-300 ${
                                 product?.stock === 0
                                   ? "opacity-50 grayscale"
@@ -255,7 +222,7 @@ const SearchBar = () => {
                             />
                           )}
                           {product?.discount && product.discount > 0 && (
-                            <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full font-semibold">
+                            <div className="absolute -top-1 -right-1 bg-[#e30613] text-white text-xs px-1.5 py-0.5 rounded-full font-semibold">
                               -{product.discount}%
                             </div>
                           )}
@@ -265,7 +232,7 @@ const SearchBar = () => {
                           <Link
                             href={`/product/${product?.slug?.current}`}
                             onClick={() => setShowSearch(false)}
-                            className="block group-hover:text-shop_dark_green transition-colors duration-200"
+                            className="block group-hover:text-[#2d2a7d] transition-colors duration-200"
                           >
                             <h3 className="font-semibold text-base sm:text-lg line-clamp-1 mb-1">
                               {product.name}
@@ -282,7 +249,7 @@ const SearchBar = () => {
                             <div className="flex items-center gap-2">
                               {product?.stock === 0 ? (
                                 <span className="text-red-500 text-sm font-medium">
-                                  Out of Stock
+                                  Sem Stock
                                 </span>
                               ) : (
                                 <AddToCartButton
@@ -293,24 +260,23 @@ const SearchBar = () => {
                             </div>
                           </div>
 
-                          {/* Product Status Badges */}
                           <div className="flex items-center gap-2 mt-2">
                             {product?.status === "hot" && (
                               <span className="inline-flex items-center gap-1 bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full font-medium">
                                 <TrendingUp className="w-3 h-3" />
-                                Hot Deal
+                                Oferta
                               </span>
                             )}
                             {product?.status === "new" && (
                               <span className="inline-flex items-center gap-1 bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-medium">
                                 <Clock className="w-3 h-3" />
-                                New Arrival
+                                Novo
                               </span>
                             )}
                             {product?.isFeatured && (
                               <span className="inline-flex items-center gap-1 bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded-full font-medium">
                                 <Star className="w-3 h-3" />
-                                Featured
+                                Destaque
                               </span>
                             )}
                           </div>
@@ -325,23 +291,21 @@ const SearchBar = () => {
                     <div className="text-center">
                       <div className="bg-gray-50 rounded-2xl p-8 mx-6">
                         <div className="flex items-center justify-center mb-4">
-                          <div className="bg-shop_dark_green/10 p-3 rounded-full">
-                            <Search className="w-8 h-8 text-shop_dark_green" />
+                          <div className="bg-[#2d2a7d]/10 p-3 rounded-full">
+                            <Search className="w-8 h-8 text-[#2d2a7d]" />
                           </div>
                         </div>
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                          Discover Amazing Products
+                          Descubra Produtos Incríveis
                         </h3>
-                        <div className="text-gray-600 mb-6">
-                          <p>Search and explore thousands of products from</p>{" "}
-                          <Logo className="inline text-base font-bold text-shop_dark_green" />
-                        </div>
+                        <p className="text-gray-600 mb-6">
+                          Pesquise e explore a nossa gama de produtos
+                        </p>
 
-                        {/* Featured Products Suggestions */}
                         {featuredProduct?.length > 0 && (
                           <div>
                             <h4 className="text-sm font-semibold text-gray-700 mb-3 text-left">
-                              Popular Searches:
+                              Mais procurados:
                             </h4>
                             <div className="flex flex-wrap gap-2">
                               {featuredProduct
@@ -352,7 +316,7 @@ const SearchBar = () => {
                                     onClick={() =>
                                       setSearch(item?.name as string)
                                     }
-                                    className="inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-shop_light_green hover:bg-shop_light_green/5 px-3 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-shop_dark_green transition-all duration-200"
+                                    className="inline-flex items-center gap-2 bg-white border border-gray-200 hover:border-[#2d2a7d] hover:bg-[#2d2a7d]/5 px-3 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-[#2d2a7d] transition-all duration-200"
                                   >
                                     <Search className="w-3 h-3" />
                                     <span className="line-clamp-1">
@@ -374,19 +338,19 @@ const SearchBar = () => {
                           </div>
                         </div>
                         <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                          No Results Found
+                          Sem resultados encontrados
                         </h3>
                         <p className="text-gray-600 mb-4">
-                          Sorry, we couldn&apos;t find any products matching{" "}
+                          Não encontrámos nenhum produto para{" "}
                           <span className="font-semibold text-red-600">
                             &quot;{search}&quot;
                           </span>
                         </p>
                         <button
                           onClick={() => setSearch("")}
-                          className="bg-shop_dark_green hover:bg-shop_light_green text-white px-6 py-2 rounded-full font-medium transition-colors duration-200"
+                          className="bg-[#2d2a7d] hover:bg-[#e30613] text-white px-6 py-2 rounded-full font-medium transition-colors duration-200"
                         >
-                          Clear Search
+                          Limpar Pesquisa
                         </button>
                       </div>
                     </div>

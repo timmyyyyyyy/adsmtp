@@ -9,10 +9,10 @@ const AuthLoading = () => {
           <div className="absolute inset-0 w-12 h-12 border-2 border-shop_light_green/30 rounded-full animate-pulse mx-auto"></div>
         </div>
         <h2 className="text-xl font-semibold text-shop_dark_green mb-2">
-          Loading Authentication...
+          Aguarde enquanto preparamos a sua sessão.
         </h2>
         <p className="text-dark-text">
-          Please wait while we prepare your sign-in experience.
+          Aguarde enquanto preparamos a sua experiência de início
         </p>
       </div>
     </div>

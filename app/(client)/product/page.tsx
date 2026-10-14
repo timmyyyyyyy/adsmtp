@@ -38,7 +38,7 @@ const ProductPage = async () => {
                   <BreadcrumbSeparator className="text-white/60" />
                   <BreadcrumbItem>
                     <BreadcrumbPage className="text-white font-medium">
-                      Products
+                      Produtos
                     </BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
@@ -69,7 +69,7 @@ const ProductPage = async () => {
                       {products?.length || 0}+ Products
                     </p>
                     <p className="text-sm text-white/70">
-                      Premium Quality Items
+                       Produtos de Qualidade
                     </p>
                   </div>
                 </div>

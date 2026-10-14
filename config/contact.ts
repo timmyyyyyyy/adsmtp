@@ -2,16 +2,16 @@
 
 export const contactConfig = {
   company: {
-    name: process.env.NEXT_PUBLIC_COMPANY_NAME || "ShopCart",
-    email: process.env.NEXT_PUBLIC_COMPANY_EMAIL || "support@shopcart.com",
-    phone: process.env.NEXT_PUBLIC_COMPANY_PHONE || "+1 (555) 123-4567",
+    name: process.env.NEXT_PUBLIC_COMPANY_NAME || "E.D.S-Tech",
+    email: process.env.NEXT_PUBLIC_COMPANY_EMAIL || "edstechnology@tvcabo.co.mz",
+    phone: process.env.NEXT_PUBLIC_COMPANY_PHONE || "+ (258) 8412-12412",
     address:
       process.env.NEXT_PUBLIC_COMPANY_ADDRESS ||
       "123 Shopping Street, Commerce District",
-    city: process.env.NEXT_PUBLIC_COMPANY_CITY || "New York, NY 10001, USA",
+    city: process.env.NEXT_PUBLIC_COMPANY_CITY || "Matola Av da liberdade nuemero 323",
     description:
       process.env.NEXT_PUBLIC_COMPANY_DESCRIPTION ||
-      "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service.",
+      "Discover amazing prodDescubra produtos incríveis na E.D.S-Tech, o seu destino de compras Atrasves do Whatsapp com confiança para artigos de qualidade e um atendimento ao cliente excepcional",
   },
   businessHours: {
     weekday:
@@ -48,7 +48,6 @@ export const contactConfig = {
   },
   support: {
     helpCenter: "/help",
-    faq: "/faqs",
     trackOrder: "/track-order",
     returns: "/returns",
     shipping: "/shipping",
@@ -60,7 +59,7 @@ export const contactConfig = {
 export const contactInfo = [
   {
     icon: "MapPin",
-    title: "Visit Our Store",
+    title: "Visite nos",
     details: contactConfig.company.address,
     subDetails: contactConfig.company.city,
     color: "text-shop_dark_green",
@@ -69,7 +68,7 @@ export const contactInfo = [
   },
   {
     icon: "Phone",
-    title: "Call Us",
+    title: "Ligue nos",
     details: contactConfig.company.phone,
     subDetails: contactConfig.businessHours.weekday,
     color: "text-shop_light_green",
@@ -78,7 +77,7 @@ export const contactInfo = [
   },
   {
     icon: "Mail",
-    title: "Email Support",
+    title: "Email de Suporte",
     details: contactConfig.emails.support,
     subDetails: contactConfig.responseTime.standard,
     color: "text-shop_orange",

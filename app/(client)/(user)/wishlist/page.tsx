@@ -1,35 +1,31 @@
-import { currentUser } from "@clerk/nextjs/server";
 import Container from "@/components/Container";
-import NoAccessToCart from "@/components/NoAccessToCart";
 import WishlistProducts from "@/components/WishlistProducts";
 import { Heart } from "lucide-react";
 import DynamicBreadcrumb from "@/components/DynamicBreadcrumb";
 
 const WishListPage = async () => {
-  const user = await currentUser();
-
   return (
     <Container className="py-6">
       {/* Breadcrumb */}
       <DynamicBreadcrumb />
 
-      {/* Page Header */}
-      <div className="flex items-center gap-2 mb-8">
-        <Heart className="w-6 h-6 text-red-500" />
+      {/* Título da Página */}
+      <div className="flex items-center gap-3 mb-8">
+        <div className="p-3 bg-red-50 rounded-full">
+          <Heart className="w-6 h-6 text-red-500 fill-red-500" />
+        </div>
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">My Wishlist</h1>
+          <h1 className="text-3xl font-bold text-[#2d2a7d]">
+            A Minha Lista de Favoritos
+          </h1>
           <p className="text-gray-600 mt-1">
-            Save your favorite items for later
+            Guarde os produtos favoritos para mais tarde
           </p>
         </div>
       </div>
 
-      {/* Content */}
-      {user ? (
-        <WishlistProducts />
-      ) : (
-        <NoAccessToCart details="Log in to save and view your favorite products. Don't miss out on the items you love!" />
-      )}
+      {/* Lista de Favoritos */}
+      <WishlistProducts />
     </Container>
   );
 };

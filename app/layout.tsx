@@ -5,8 +5,6 @@ import localFont from "next/font/local";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import Head from "next/head";
-import { UserDataProvider } from "@/contexts/UserDataContext";
-import PremiumFloatingButton from "@/components/PremiumFloatingButton";
 import "./globals.css";
 
 const poppins = localFont({
@@ -28,28 +26,31 @@ const opensans = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://shopcartpro.reactbd.org"),
+  metadataBase: new URL("https://edstech.co.mz"),
   title: {
-    template: "%s | ShopCart - Premium Online Shopping",
-    default: "ShopCart - Your Trusted Online Shopping Destination",
+    template: "%s | E.D.S TECHNOLOGY LDA",
+    default: "E.D.S TECHNOLOGY LDA - Engenharia, Tecnologia e Soluções",
   },
   description:
-    "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service. Shop electronics, fashion, home goods and more with fast delivery.",
+    "Soluções inteligentes em engenharia, tecnologia e serviços. Qualidade, segurança e eficiência para sua residência ou empresa.",
   keywords: [
-    "online shopping",
-    "e-commerce",
-    "buy online",
-    "shop online",
-    "electronics",
-    "fashion",
-    "home goods",
-    "deals",
-    "discounts",
-    "ShopCart",
+    "E.D.S Technology",
+    "engenharia",
+    "tecnologia",
+    "refrigeração",
+    "climatização",
+    "segurança eletrónica",
+    "vedação elétrica",
+    "Starlink",
+    "instalações elétricas",
+    "facility management",
+    "Moçambique",
+    "Maputo",
+    "Matola",
   ],
-  authors: [{ name: "ShopCart" }],
-  creator: "ShopCart",
-  publisher: "ShopCart",
+  authors: [{ name: "E.D.S Technology LDA" }],
+  creator: "E.D.S Technology LDA",
+  publisher: "E.D.S Technology LDA",
   formatDetection: {
     email: false,
     address: false,
@@ -57,28 +58,27 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_US",
-    url: "https://shopcartpro.reactbd.org",
-    siteName: "ShopCart",
-    title: "ShopCart - Your Trusted Online Shopping Destination",
+    locale: "pt_MZ",
+    url: "https://edstech.co.mz",
+    siteName: "E.D.S Technology LDA",
+    title: "E.D.S TECHNOLOGY LDA - Engenharia, Tecnologia e Soluções",
     description:
-      "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service.",
+      "Soluções inteligentes em engenharia, tecnologia e serviços. Qualidade, segurança e eficiência para sua residência ou empresa.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/log.png",
         width: 1200,
         height: 630,
-        alt: "ShopCart Online Store",
+        alt: "E.D.S Technology LDA",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ShopCart - Your Trusted Online Shopping Destination",
+    title: "E.D.S TECHNOLOGY LDA - Engenharia, Tecnologia e Soluções",
     description:
-      "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service.",
-    images: ["/og-image.jpg"],
-    creator: "@shopcart",
+      "Soluções inteligentes em engenharia, tecnologia e serviços em Moçambique.",
+    images: ["/log.png"],
   },
   robots: {
     index: true,
@@ -91,28 +91,26 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
-    // Add other verification codes as needed
-  },
   alternates: {
-    canonical: "https://shopcartpro.reactbd.org",
+    canonical: "https://edstech.co.mz",
   },
 };
 
 const RootLayout = async ({ children }: { children: ReactNode }) => {
-  const GADSENSE_CLIENT_ID = "ca-pub-6542623777003381"; // Define it once
+  const GADSENSE_CLIENT_ID = "ca-pub-6542623777003381";
   return (
-    <ClerkProvider>
-      <html lang="en">
+    <ClerkProvider
+      signInFallbackRedirectUrl="/studio"
+      signUpFallbackRedirectUrl="/studio"
+    >
+      <html lang="pt">
         <Head>
           <meta name="google-adsense-account" content={GADSENSE_CLIENT_ID} />
         </Head>
         <body
           className={`${poppins.variable} ${raleway.variable} ${opensans.variable} antialiased`}
         >
-          <UserDataProvider>{children}</UserDataProvider>
-          <PremiumFloatingButton />
+          {children}
           <Toaster
             position="bottom-right"
             richColors
@@ -128,7 +126,6 @@ const RootLayout = async ({ children }: { children: ReactNode }) => {
               className: "sonner-toast",
             }}
           />
-
           <Script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${GADSENSE_CLIENT_ID}`}

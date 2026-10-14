@@ -145,7 +145,7 @@ const SignUpPage = () => {
                 className="mt-6 text-center"
               >
                 <p className="text-sm text-dark-text">
-                  Questions? Contact us at{" "}
+                  Perguntas? Contacte nos {" "}
                   <a
                     href={`mailto:${contactConfig.emails.support}`}
                     className="text-shop_light_green hover:text-shop_dark_green font-medium transition-colors duration-200"

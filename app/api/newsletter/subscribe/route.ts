@@ -7,19 +7,19 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { email } = body;
 
-    // Validate email presence
     if (!email) {
-      return NextResponse.json({ error: "Email is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "O e-mail é obrigatório" },
+        { status: 400 }
+      );
     }
 
-    // Get client info
     const ipAddress =
       request.headers.get("x-forwarded-for") ||
       request.headers.get("x-real-ip") ||
       "unknown";
     const userAgent = request.headers.get("user-agent") || "unknown";
 
-    // Subscribe to newsletter
     const result = await subscribeToNewsletter({
       email,
       source: "footer",
@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
       userAgent,
     });
 
-    // If subscription failed or already subscribed
     if (!result.success) {
       return NextResponse.json(
         {
@@ -38,17 +37,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send welcome email
+    // Enviar email de boas-vindas
     const emailResult = await sendMail({
       email,
-      subject: "Welcome to ShopCart Newsletter! 🎉",
-      text: `Thank you for subscribing to our newsletter! You're now part of our exclusive community.`,
+      subject: "Bem-vindo à Newsletter da E.D.S TECH! 🎉",
+      text: `Obrigado por subscrever à nossa newsletter! Agora faz parte da nossa comunidade exclusiva.`,
       html: generateWelcomeEmailHTML(email),
     });
 
     if (!emailResult.success) {
-      console.error("Failed to send welcome email:", emailResult.error);
-      // Still return success for subscription even if email fails
+      console.error("Falha ao enviar email de boas-vindas:", emailResult.error);
     }
 
     return NextResponse.json(
@@ -59,98 +57,74 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error("Newsletter subscription API error:", error);
+    console.error("Erro na API de subscrição da newsletter:", error);
     return NextResponse.json(
-      { error: "Something went wrong. Please try again later." },
+      { error: "Algo correu mal. Tente novamente mais tarde." },
       { status: 500 }
     );
   }
 }
 
-// Generate beautiful welcome email HTML
+// Email HTML com identidade E.D.S TECH
 function generateWelcomeEmailHTML(email: string): string {
   return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to ShopCart Newsletter</title>
+    <title>Bem-vindo à Newsletter da E.D.S TECH</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #f8f9fa;
+            background-color: #f8f8fb;
         }
-        
         .container {
             max-width: 600px;
             margin: 0 auto;
             background-color: #ffffff;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
         .header {
-            background: linear-gradient(135deg, #063c28 0%, #3b9c3c 100%);
+            background: linear-gradient(135deg, #2d2a7d 0%, #e30613 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
         }
-        
         .header h1 {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 10px;
         }
-        
-        .header p {
-            font-size: 18px;
-            opacity: 0.95;
-        }
-        
-        .content {
-            padding: 40px 30px;
-        }
-        
-        .welcome-message {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
+        .header p { font-size: 18px; opacity: 0.95; }
+        .content { padding: 40px 30px; }
+        .welcome-message { text-align: center; margin-bottom: 30px; }
         .welcome-message h2 {
-            color: #063c28;
+            color: #2d2a7d;
             font-size: 28px;
             margin-bottom: 15px;
         }
-        
         .welcome-message p {
             color: #495057;
             font-size: 16px;
             line-height: 1.8;
         }
-        
         .benefits {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #f8f8fb 0%, #eef1f9 100%);
             border-radius: 12px;
             padding: 30px;
             margin: 30px 0;
             border: 1px solid #dee2e6;
         }
-        
         .benefits h3 {
-            color: #063c28;
+            color: #2d2a7d;
             font-size: 22px;
             margin-bottom: 20px;
             text-align: center;
         }
-        
         .benefit-item {
             display: flex;
             align-items: flex-start;
@@ -160,127 +134,68 @@ function generateWelcomeEmailHTML(email: string): string {
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        
         .benefit-icon {
             font-size: 24px;
             margin-right: 15px;
             min-width: 30px;
         }
-        
         .benefit-text h4 {
-            color: #063c28;
+            color: #2d2a7d;
             font-size: 16px;
             margin-bottom: 5px;
         }
-        
         .benefit-text p {
             color: #6c757d;
             font-size: 14px;
             line-height: 1.6;
         }
-        
-        .cta-section {
-            text-align: center;
-            margin: 40px 0;
-        }
-        
+        .cta-section { text-align: center; margin: 40px 0; }
         .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #063c28 0%, #3b9c3c 100%);
+            background: linear-gradient(135deg, #2d2a7d 0%, #e30613 100%);
             color: white;
             padding: 15px 40px;
             text-decoration: none;
             border-radius: 8px;
             font-weight: 600;
             font-size: 16px;
-            box-shadow: 0 4px 8px rgba(6, 60, 40, 0.3);
-            transition: transform 0.3s;
+            box-shadow: 0 4px 8px rgba(45, 42, 125, 0.3);
         }
-        
-        .cta-button:hover {
-            transform: translateY(-2px);
-        }
-        
         .social-proof {
-            background: linear-gradient(135d, #d1ecf1 0%, #b8e6ff 100%);
+            background: linear-gradient(135deg, #eef1f9 0%, #fce5e8 100%);
             border-radius: 12px;
             padding: 25px;
             margin: 30px 0;
             text-align: center;
-            border: 1px solid #bee5eb;
+            border: 1px solid #e6e9f5;
         }
-        
         .social-proof h3 {
-            color: #0c5460;
+            color: #2d2a7d;
             font-size: 20px;
             margin-bottom: 10px;
         }
-        
-        .social-proof p {
-            color: #0c5460;
-            font-size: 14px;
-        }
-        
+        .social-proof p { color: #555; font-size: 14px; }
         .footer {
-            background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2a7d 100%);
             color: #ffffff;
             padding: 40px 20px;
             text-align: center;
-            border-top: 4px solid #063c28;
+            border-top: 4px solid #e30613;
         }
-        
         .footer p {
             margin-bottom: 15px;
             opacity: 0.9;
             font-size: 14px;
         }
-        
-        .footer a {
-            color: #ffffff;
-            text-decoration: none;
-            opacity: 0.8;
-            transition: opacity 0.3s;
-        }
-        
-        .footer a:hover {
-            opacity: 1;
-        }
-        
-        .social-links {
-            margin-top: 20px;
-        }
-        
-        .social-links a {
-            margin: 0 10px;
-        }
-        
-        .unsubscribe {
-            margin-top: 20px;
-            font-size: 12px;
-            opacity: 0.7;
-        }
-        
+        .footer a { color: #ffffff; text-decoration: none; opacity: 0.8; }
+        .social-links { margin-top: 20px; }
+        .social-links a { margin: 0 10px; }
+        .unsubscribe { margin-top: 20px; font-size: 12px; opacity: 0.7; }
         @media (max-width: 600px) {
-            .container {
-                margin: 0;
-            }
-            
-            .header, .content, .footer {
-                padding: 20px 15px;
-            }
-            
-            .benefits {
-                padding: 20px 15px;
-            }
-            
-            .benefit-item {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .benefit-icon {
-                margin: 0 0 10px 0;
-            }
+            .header, .content, .footer { padding: 20px 15px; }
+            .benefits { padding: 20px 15px; }
+            .benefit-item { flex-direction: column; text-align: center; }
+            .benefit-icon { margin: 0 0 10px 0; }
         }
     </style>
 </head>
@@ -288,110 +203,104 @@ function generateWelcomeEmailHTML(email: string): string {
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🎉 Welcome to ShopCart!</h1>
-            <p>Thank you for joining our newsletter community</p>
+            <h1>🎉 Bem-vindo à E.D.S TECH!</h1>
+            <p>Obrigado por subscrever à nossa newsletter</p>
         </div>
-        
+
         <!-- Main Content -->
         <div class="content">
-            <!-- Welcome Message -->
             <div class="welcome-message">
-                <h2>You're All Set! 🌟</h2>
+                <h2>Está Tudo Pronto! 🌟</h2>
                 <p>
-                    Thank you for subscribing to the ShopCart newsletter! We're thrilled to have you as part of our community. 
-                    Get ready to receive exclusive deals, new product announcements, and helpful shopping tips directly to your inbox.
+                    Obrigado por subscrever à newsletter da E.D.S TECH! Estamos muito contentes por ter você como parte da nossa comunidade.
+                    Prepare-se para receber dicas técnicas, novidades e ofertas exclusivas diretamente no seu e-mail.
                 </p>
             </div>
-            
-            <!-- Benefits Section -->
+
+            <!-- Benefits -->
             <div class="benefits">
-                <h3>What You'll Get as a Subscriber</h3>
-                
+                <h3>O Que Vai Receber Como Subscritor</h3>
+
                 <div class="benefit-item">
                     <div class="benefit-icon">🎁</div>
                     <div class="benefit-text">
-                        <h4>Exclusive Deals & Discounts</h4>
-                        <p>Be the first to know about special promotions, flash sales, and subscriber-only discounts up to 50% off!</p>
+                        <h4>Ofertas & Descontos Exclusivos</h4>
+                        <p>Seja o primeiro a saber sobre promoções especiais e descontos exclusivos para subscritores.</p>
                     </div>
                 </div>
-                
+
                 <div class="benefit-item">
                     <div class="benefit-icon">🚀</div>
                     <div class="benefit-text">
-                        <h4>Early Access to New Products</h4>
-                        <p>Get a sneak peek and early access to our latest product launches before anyone else.</p>
+                        <h4>Acesso Antecipado a Novos Serviços</h4>
+                        <p>Conheça em primeira mão os novos serviços e soluções técnicas da E.D.S TECH.</p>
                     </div>
                 </div>
-                
-                <div class="benefit-item">
-                    <div class="benefit-icon">📦</div>
-                    <div class="benefit-text">
-                        <h4>Free Shipping Offers</h4>
-                        <p>Enjoy exclusive free shipping promotions and special delivery deals reserved for our subscribers.</p>
-                    </div>
-                </div>
-                
+
                 <div class="benefit-item">
                     <div class="benefit-icon">💡</div>
                     <div class="benefit-text">
-                        <h4>Shopping Tips & Trends</h4>
-                        <p>Stay updated with the latest shopping trends, product guides, and helpful tips to make the most of your purchases.</p>
+                        <h4>Dicas Técnicas & Tutoriais</h4>
+                        <p>Fique atualizado com dicas de manutenção, tutoriais e novidades do setor.</p>
                     </div>
                 </div>
-                
+
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛠️</div>
+                    <div class="benefit-text">
+                        <h4>Suporte Prioritário</h4>
+                        <p>Atendimento rápido e prioritário para subscritores da newsletter.</p>
+                    </div>
+                </div>
+
                 <div class="benefit-item">
                     <div class="benefit-icon">🎂</div>
                     <div class="benefit-text">
-                        <h4>Birthday Surprises</h4>
-                        <p>Receive special birthday gifts and exclusive discounts to celebrate your special day with us!</p>
+                        <h4>Promoções de Aniversário</h4>
+                        <p>Receba descontos especiais para celebrar o seu aniversário connosco!</p>
                     </div>
                 </div>
             </div>
-            
-            <!-- CTA Section -->
+
+            <!-- CTA -->
             <div class="cta-section">
-                <p style="margin-bottom: 20px; color: #495057;">Start exploring amazing deals today!</p>
-                <a href="${
-                  process.env.NEXT_PUBLIC_BASE_URL || "https://shopcart.com"
-                }" class="cta-button">
-                    Shop Now →
+                <p style="margin-bottom: 20px; color: #495057;">Explore os nossos serviços hoje mesmo!</p>
+                <a href="${process.env.NEXT_PUBLIC_BASE_URL || "https://edstech.co.mz"}/shop" class="cta-button">
+                    Ver Serviços →
                 </a>
             </div>
-            
+
             <!-- Social Proof -->
             <div class="social-proof">
-                <h3>Join 50,000+ Happy Subscribers!</h3>
-                <p>You're now part of our growing community of savvy shoppers who never miss a great deal.</p>
+                <h3>Junte-se a Centenas de Clientes Satisfeitos!</h3>
+                <p>Agora faz parte da nossa comunidade de clientes que confiam na E.D.S TECH.</p>
             </div>
         </div>
-        
+
         <!-- Footer -->
         <div class="footer">
-            <p><strong>ShopCart</strong></p>
-            <p>123 Shopping Street, Commerce District<br>
-               New York, NY 10001, USA</p>
+            <p><strong>E.D.S TECHNOLOGY LDA</strong></p>
+            <p>Engenharia • Tecnologia • Soluções<br>
+               Matola, Av. da Liberdade, nº 323<br>
+               Moçambique</p>
             <p>
-                Questions? Contact us at 
-                <a href="mailto:support@shopcart.com">support@shopcart.com</a> or 
-                call <a href="tel:+15551234567">+1 (555) 123-4567</a>
+                Dúvidas? Contacte-nos em
+                <a href="mailto:edstechnology@tvcabo.co.mz">edstechnology@tvcabo.co.mz</a> ou
+                <a href="tel:+258844974637">+258 84 497 4637</a>
             </p>
-            
+
             <div class="social-links">
-                <a href="https://www.youtube.com/@reactjsBD">Facebook</a> |
-                <a href="https://www.youtube.com/@reactjsBD">Twitter</a> |
-                <a href="https://www.youtube.com/@reactjsBD">Instagram</a> |
-                <a href="https://www.youtube.com/@reactjsBD">YouTube</a>
+                <a href="https://www.facebook.com/edstech">Facebook</a> |
+                <a href="https://www.instagram.com/edstech">Instagram</a> |
+                <a href="https://wa.me/258844974637">WhatsApp</a>
             </div>
-            
+
             <div class="unsubscribe">
                 <p>
-                    You received this email because you subscribed to ShopCart Newsletter with ${email}.<br>
-                    <a href="${
-                      process.env.NEXT_PUBLIC_BASE_URL ||
-                      "https://shopcartpro.org"
-                    }/unsubscribe?email=${encodeURIComponent(
-    email
-  )}">Unsubscribe</a>
+                    Recebeu este e-mail porque subscreveu à Newsletter da E.D.S TECH com ${email}.<br>
+                    <a href="${process.env.NEXT_PUBLIC_BASE_URL || "https://edstech.co.mz"}/unsubscribe?email=${encodeURIComponent(email)}">
+                        Cancelar Subscrição
+                    </a>
                 </p>
             </div>
         </div>

@@ -41,7 +41,7 @@ const NoProductAvailable = ({
         transition={{ delay: 0.2, duration: 0.5 }}
         className="space-y-2"
       >
-        <h2 className="text-2xl font-bold text-gray-800">No Products Found</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Sem Produtos Encotrados</h2>
         <p className="text-gray-600 max-w-md">
           We couldn&apos;t find any products{" "}
           {selectedTab && (
@@ -65,7 +65,7 @@ const NoProductAvailable = ({
         className="space-y-4 w-full max-w-md"
       >
         <p className="text-sm text-gray-500 font-medium">
-          What would you like to do?
+          O que deseja fazer?
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -74,7 +74,7 @@ const NoProductAvailable = ({
             className="inline-flex items-center justify-center gap-2 bg-shop_light_green hover:bg-shop_dark_green text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105"
           >
             <Grid3X3 className="w-4 h-4" />
-            Browse All Products
+            Ver todos os produtos
             <ArrowRight className="w-4 h-4" />
           </Link>
 
@@ -83,14 +83,14 @@ const NoProductAvailable = ({
             className="inline-flex items-center justify-center gap-2 border border-shop_light_green text-shop_light_green hover:bg-shop_light_green hover:text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all duration-300"
           >
             <Package className="w-4 h-4" />
-            View Categories
+            Ver categorias
           </Link>
         </div>
 
         <div className="pt-2 border-t border-gray-100">
           <p className="text-xs text-gray-400 flex items-center justify-center gap-2">
             <Search className="w-3 h-3" />
-            Try exploring our other product categories
+            Dê uma olhada também nas nossas outras categorias de produtos!
           </p>
         </div>
       </motion.div>

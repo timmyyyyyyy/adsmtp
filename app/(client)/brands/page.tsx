@@ -30,7 +30,7 @@ const BrandsPage = () => {
         </div>
         <div className="text-center">
           <h1 className="text-4xl font-bold text-shop_dark_green mb-4">
-            Shop by Brands
+            Comprar por Marca
           </h1>
           <p className="text-lg text-dark-text">
             Coming soon - Browse products by your favorite brands

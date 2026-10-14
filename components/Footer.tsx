@@ -8,7 +8,7 @@ import NewsletterForm from "./NewsletterForm";
 
 const Footer = () => {
   return (
-    <footer className="bg-white border-t">
+    <footer className="bg-[#2d2a7d] text-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Top section with contact info */}
         <FooterTop />
@@ -19,24 +19,26 @@ const Footer = () => {
             <div className="mb-2">
               <Logo variant="sm" />
             </div>
-            <p className="text-gray-600 text-sm">
+            <p className="text-gray-200 text-sm leading-relaxed">
               {contactConfig.company.description}
             </p>
             <SocialMedia
-              className="text-dark-color/60"
-              iconClassName="border-dark-color/60 hover:border-shop_dark_green hover:text-shop_dark_green"
-              tooltipClassName="bg-dark-color text-white"
+              className="text-white/80"
+              iconClassName="border-white/30 hover:border-[#fbbf24] hover:text-[#fbbf24]"
+              tooltipClassName="bg-[#0f0f1a] text-white"
             />
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Quick Links</h3>
+            <h3 className="font-bold text-[#fbbf24] mb-4 uppercase tracking-wider text-sm">
+              Acesso Rápido
+            </h3>
             <ul className="space-y-3">
               {quickLinksData?.map((item) => (
                 <li key={item?.title}>
                   <Link
                     href={item?.href}
-                    className="text-gray-600 hover:text-shop_dark_green text-sm font-medium hoverEffect"
+                    className="text-gray-200 hover:text-[#fbbf24] text-sm font-medium transition-colors duration-200"
                   >
                     {item?.title}
                   </Link>
@@ -46,13 +48,15 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Categories</h3>
+            <h3 className="font-bold text-[#fbbf24] mb-4 uppercase tracking-wider text-sm">
+              Categorias
+            </h3>
             <ul className="space-y-3">
               {categoriesData.map((item) => (
                 <li key={item?.title}>
                   <Link
                     href={`/category/${item?.href}`}
-                    className="text-gray-600 hover:text-shop_dark_green text-sm font-medium hoverEffect capitalize"
+                    className="text-gray-200 hover:text-[#fbbf24] text-sm font-medium transition-colors duration-200 capitalize"
                   >
                     {item?.title}
                   </Link>
@@ -62,26 +66,24 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-900 mb-4">Newsletter</h3>
-            <p className="text-gray-600 text-sm mb-4">
-              Subscribe to our newsletter to receive updates and exclusive
-              offers.
+            <h3 className="font-bold text-[#fbbf24] mb-4 uppercase tracking-wider text-sm">
+              Envie-nos um E-mail
+            </h3>
+            <p className="text-gray-200 text-sm mb-4 leading-relaxed">
+              Deixe-nos o seu e-mail para melhor interação
             </p>
             <NewsletterForm />
           </div>
         </div>
 
-        {/* Bottom copyright section */}
-        <div className="py-6 border-t text-center text-sm text-gray-600">
+        {/* Bottom copyright */}
+        <div className="py-6 border-t border-white/20 text-center text-sm text-gray-200">
           <p>
             © {new Date().getFullYear()}{" "}
-            <span className="text-dark-color font-black tracking-wider uppercase hover:text-shop_dark_green hoverEffect group font-sans">
-              Shpopcar
-              <span className="text-shop_dark_green group-hover:text-dark-color hoverEffect">
-                t
-              </span>
+            <span className="text-white font-black tracking-wider uppercase font-sans">
+              E.D.S TECH
             </span>
-            . All rights reserved.
+            . Todos os Direitos Reservados
           </p>
         </div>
       </div>

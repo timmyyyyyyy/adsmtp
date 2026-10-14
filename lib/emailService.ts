@@ -587,7 +587,7 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
             <!-- Support Section -->
             <div class="support-section">
                 <h3>Need Help?</h3>
-                <p>Our customer service team is here to help with any questions about your order.</p>
+                <p> disponível para ajudar com qualquer questão sobre o seu pedido.</p>
                 
                 <div class="contact-info">
                     <div class="contact-item">
@@ -609,15 +609,15 @@ const generateOrderConfirmationHTML = (data: OrderConfirmationData): string => {
         <!-- Footer -->
         <div class="footer">
             <p><strong>ShopCart</strong></p>
-            <p>123 Shopping Street, Commerce District<br>
-               New York, NY 10001, USA</p>
+            <p>Av das Industrias N 5006 <br>
+               Matola Av da liberdade Numero323</p>
             <p>Thank you for choosing ShopCart!</p>
             
             <div class="social-links">
-                <a href="https://www.youtube.com/@reactjsBD">Facebook</a> |
-                <a href="https://www.youtube.com/@reactjsBD">Twitter</a> |
-                <a href="https://www.youtube.com/@reactjsBD">Instagram</a> |
-                <a href="https://www.youtube.com/@reactjsBD">Support</a>
+                <a href="">Facebook</a> |
+                <a href="">Twitter</a> |
+                <a href="">Instagram</a> |
+                <a href="">Support</a>
             </div>
         </div>
     </div>

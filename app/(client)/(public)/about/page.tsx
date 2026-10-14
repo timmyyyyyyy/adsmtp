@@ -2,16 +2,23 @@
 
 import { motion } from "motion/react";
 import {
-  Heart,
   Users,
+  Wrench,
   Award,
-  ShoppingBag,
+  Heart,
   Target,
-  Globe,
-  Zap,
   Shield,
+  Zap,
   Star,
   ArrowRight,
+  CheckCircle,
+  MapPin,
+  Clock,
+  MessageCircle,
+  Snowflake,
+  Satellite,
+  Sun,
+  Building2,
 } from "lucide-react";
 import Container from "@/components/Container";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,88 +27,92 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 const AboutPage = () => {
+  const whatsappUrl =
+    "https://wa.me/258844974637?text=Ol%C3%A1!%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es%20sobre%20a%20E.D.S%20TECH.";
+
+  // ===== ESTATÍSTICAS =====
   const stats = [
-    { number: "10K+", label: "Happy Customers", icon: Users },
-    { number: "500+", label: "Products", icon: ShoppingBag },
-    { number: "50+", label: "Brands", icon: Award },
-    { number: "99%", label: "Satisfaction", icon: Heart },
+    { number: "500+", label: "Clientes Satisfeitos", icon: Users },
+    { number: "9", label: "Áreas de Serviço", icon: Wrench },
+    { number: "10+", label: "Anos de Experiência", icon: Award },
+    { number: "99%", label: "Taxa de Satisfação", icon: Heart },
   ];
 
+  // ===== SERVIÇOS =====
+  const services = [
+    { icon: Snowflake, title: "Refrigeração e Climatização" },
+    { icon: Shield, title: "Segurança Eletrónica (CCTV)" },
+    { icon: Zap, title: "Vedação Elétrica" },
+    { icon: Satellite, title: "Internet Starlink" },
+    { icon: Sun, title: "Energia Solar" },
+    { icon: Wrench, title: "Instalações Elétricas" },
+    { icon: Building2, title: "Facility Management" },
+    { icon: CheckCircle, title: "Ferramentas Profissionais" },
+  ];
+
+  // ===== VALORES =====
   const values = [
     {
       icon: Target,
-      title: "Customer First",
-      description: "Every decision we make starts with our customers in mind.",
-      color: "text-shop_light_green",
+      title: "Foco no Cliente",
+      description:
+        "Cada decisão começa por entender as necessidades reais do cliente.",
+      color: "text-[#e30613]",
     },
     {
       icon: Shield,
-      title: "Quality Assurance",
-      description: "We ensure every product meets our high standards.",
-      color: "text-shop_dark_green",
+      title: "Qualidade Garantida",
+      description:
+        "Todos os serviços com garantia, executados por técnicos certificados.",
+      color: "text-[#2d2a7d]",
     },
     {
       icon: Zap,
-      title: "Innovation",
-      description: "Constantly evolving to bring you the latest and greatest.",
-      color: "text-shop_orange",
-    },
-    {
-      icon: Globe,
-      title: "Sustainability",
+      title: "Rapidez",
       description:
-        "Committed to eco-friendly practices and responsible sourcing.",
-      color: "text-shop_light_green",
-    },
-  ];
-
-  const team = [
-    {
-      name: "Sarah Johnson",
-      role: "CEO & Founder",
-      image: "/images/team/ceo.jpg",
-      description: "Visionary leader with 15+ years in e-commerce",
+        "Resposta rápida e execução eficiente em todos os pedidos.",
+      color: "text-[#fbbf24]",
     },
     {
-      name: "Michael Chen",
-      role: "CTO",
-      image: "/images/team/cto.jpg",
-      description: "Tech innovator driving our digital transformation",
-    },
-    {
-      name: "Emily Rodriguez",
-      role: "Head of Design",
-      image: "/images/team/design.jpg",
-      description: "Creative force behind our user experience",
+      icon: Heart,
+      title: "Confiança",
+      description:
+        "Relações de longo prazo construídas com transparência e honestidade.",
+      color: "text-[#25D366]",
     },
   ];
 
   return (
-    <div className="bg-gradient-to-b from-shop_light_bg to-white min-h-screen">
-      {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-shop_dark_green to-shop_light_green text-white">
-        <Container className="max-w-6xl">
+    <div className="bg-gray-50 min-h-screen">
+      {/* ===== HERO ===== */}
+      <section className="relative py-20 bg-[#2d2a7d] text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#e30613] rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#fbbf24] rounded-full blur-3xl"></div>
+        </div>
+        <Container className="relative z-10 max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
             <Badge className="mb-6 bg-white/20 text-white border-white/30 hover:bg-white/30">
-              Est. 2025
+              Empresa Moçambicana
             </Badge>
             <h1 className="text-5xl lg:text-6xl font-bold mb-6">
-              About ShopCart
+              Sobre a E.D.S TECH
             </h1>
+            <div className="w-24 h-1 bg-[#e30613] mx-auto mb-6 rounded-full"></div>
             <p className="text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              We&apos;re revolutionizing online shopping with curated products,
-              exceptional service, and innovative technology that puts customers
-              first.
+              Engenharia, tecnologia e soluções inteligentes para a sua
+              residência ou empresa. Qualidade, segurança e eficiência em cada
+              serviço.
             </p>
           </motion.div>
         </Container>
       </section>
 
-      {/* Stats Section */}
+      {/* ===== ESTATÍSTICAS ===== */}
       <section className="py-16 -mt-10">
         <Container className="max-w-6xl">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -112,13 +123,15 @@ const AboutPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="text-center bg-white shadow-lg hover:shadow-xl transition-shadow">
+                <Card className="text-center bg-white shadow-lg hover:shadow-xl transition-shadow border-0">
                   <CardContent className="pt-6">
-                    <stat.icon className="w-8 h-8 mx-auto mb-3 text-shop_light_green" />
-                    <h3 className="text-3xl font-bold text-shop_dark_green mb-1">
+                    <stat.icon className="w-8 h-8 mx-auto mb-3 text-[#e30613]" />
+                    <h3 className="text-3xl font-bold text-[#2d2a7d] mb-1">
                       {stat.number}
                     </h3>
-                    <p className="text-dark-text font-medium">{stat.label}</p>
+                    <p className="text-gray-600 font-medium text-sm">
+                      {stat.label}
+                    </p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -127,7 +140,7 @@ const AboutPage = () => {
         </Container>
       </section>
 
-      {/* Story Section */}
+      {/* ===== A NOSSA HISTÓRIA ===== */}
       <section className="py-20">
         <Container className="max-w-6xl">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -136,63 +149,78 @@ const AboutPage = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <Badge className="mb-4 bg-shop_light_green/10 text-shop_dark_green hover:bg-shop_light_green/20">
-                Our Story
+              <Badge className="mb-4 bg-[#e30613]/10 text-[#e30613] hover:bg-[#e30613]/20 border-0">
+                A Nossa História
               </Badge>
-              <h2 className="text-4xl font-bold text-shop_dark_green mb-6">
-                Building the Future of E-commerce
+              <h2 className="text-4xl font-bold text-[#2d2a7d] mb-6">
+                Soluções Técnicas de Confiança em Moçambique
               </h2>
-              <p className="text-lg text-dark-text mb-6 leading-relaxed">
-                Founded in 2020 with a simple mission: make online shopping more
-                personal, more accessible, and more enjoyable for everyone. What
-                started as a small team with big dreams has grown into a
-                platform trusted by thousands of customers worldwide.
+              <p className="text-lg text-gray-700 mb-6 leading-relaxed">
+                A <strong>E.D.S TECH – Engenharia, Tecnologia e Soluções</strong>{" "}
+                é uma empresa moçambicana especializada em serviços técnicos
+                profissionais. Atuamos em <strong>Maputo e Matola</strong>{" "}
+                oferecendo soluções completas em refrigeração, segurança
+                eletrónica, energia e muito mais.
               </p>
-              <p className="text-lg text-dark-text mb-8 leading-relaxed">
-                We believe shopping should be an experience, not just a
-                transaction. That&apos;s why we carefully curate every product,
-                partner with ethical brands, and continuously innovate to serve
-                you better.
+              <p className="text-lg text-gray-700 mb-8 leading-relaxed">
+                A nossa missão é simples: <strong>proporcionar serviços de
+                qualidade com rapidez, transparência e garantia</strong>,
+                construindo relações de confiança com cada cliente.
               </p>
-              <Button
-                asChild
-                className="bg-shop_dark_green hover:bg-shop_btn_dark_green"
-              >
-                <Link href="/contact">
-                  Get in Touch <ArrowRight className="w-4 h-4 ml-2" />
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button className="bg-[#25D366] hover:bg-[#1da851] text-white">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Falar Connosco
+                  </Button>
+                </a>
+                <Link href="/shop">
+                  <Button
+                    variant="outline"
+                    className="border-[#2d2a7d] text-[#2d2a7d] hover:bg-[#2d2a7d] hover:text-white"
+                  >
+                    Ver Loja <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </Link>
-              </Button>
+              </div>
             </motion.div>
+
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               className="relative"
             >
-              <div className="bg-gradient-to-br from-shop_light_green to-shop_dark_green rounded-2xl p-8 text-white">
+              <div className="bg-gradient-to-br from-[#2d2a7d] to-[#e30613] rounded-2xl p-8 text-white">
                 <div className="grid grid-cols-2 gap-4 mb-6">
                   <div className="bg-white/20 rounded-lg p-4 text-center">
-                    <Star className="w-6 h-6 mx-auto mb-2" />
-                    <p className="font-semibold">Premium Quality</p>
+                    <MapPin className="w-6 h-6 mx-auto mb-2" />
+                    <p className="font-semibold text-sm">Maputo & Matola</p>
                   </div>
                   <div className="bg-white/20 rounded-lg p-4 text-center">
-                    <Shield className="w-6 h-6 mx-auto mb-2" />
-                    <p className="font-semibold">Secure Shopping</p>
+                    <Clock className="w-6 h-6 mx-auto mb-2" />
+                    <p className="font-semibold text-sm">Seg-Sex 7:30-17:30</p>
                   </div>
                 </div>
                 <blockquote className="text-lg italic">
-                  &quot;Shopping should be delightful, not a chore. We&apos;re
-                  here to make every purchase feel special.&quot;
+                  &quot;Na E.D.S TECH, cada serviço é executado como se fosse
+                  para a nossa própria casa.&quot;
                 </blockquote>
-                <p className="mt-4 font-semibold">- Sarah Johnson, Founder</p>
+                <p className="mt-4 font-semibold text-sm">
+                  — Equipa E.D.S TECH
+                </p>
               </div>
             </motion.div>
           </div>
         </Container>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20 bg-shop_light_bg">
+      {/* ===== OS NOSSOS SERVIÇOS ===== */}
+      <section className="py-20 bg-white">
         <Container className="max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -200,48 +228,100 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <Badge className="mb-4 bg-shop_orange/10 text-shop_orange hover:bg-shop_orange/20">
-              Our Values
+            <Badge className="mb-4 bg-[#2d2a7d]/10 text-[#2d2a7d] hover:bg-[#2d2a7d]/20 border-0">
+              O Que Fazemos
             </Badge>
-            <h2 className="text-4xl font-bold text-shop_dark_green mb-4">
-              What We Stand For
+            <h2 className="text-4xl font-bold text-[#2d2a7d] mb-4">
+              Áreas de Atuação
             </h2>
-            <p className="text-lg text-dark-text max-w-2xl mx-auto">
-              These core values guide everything we do, from product selection
-              to customer service.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Oferecemos uma gama completa de serviços técnicos com
+              profissionais certificados.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {services.map((service, index) => {
+              const Icon = service.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-all border-0 bg-gray-50 hover:bg-white">
+                    <CardContent className="p-6 text-center">
+                      <div className="w-12 h-12 mx-auto mb-3 bg-[#2d2a7d] rounded-full flex items-center justify-center">
+                        <Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="font-semibold text-[#2d2a7d] text-sm leading-tight">
+                        {service.title}
+                      </h3>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </Container>
+      </section>
+
+      {/* ===== VALORES ===== */}
+      <section className="py-20 bg-gray-50">
+        <Container className="max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 bg-[#e30613]/10 text-[#e30613] hover:bg-[#e30613]/20 border-0">
+              Os Nossos Valores
+            </Badge>
+            <h2 className="text-4xl font-bold text-[#2d2a7d] mb-4">
+              O Que Nos Guia
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Estes princípios estão presentes em todos os serviços que
+              prestamos.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="h-full hover:shadow-lg transition-all group cursor-pointer">
-                  <CardContent className="p-6 text-center">
-                    <value.icon
-                      className={`w-12 h-12 mx-auto mb-4 ${value.color} group-hover:scale-110 transition-transform`}
-                    />
-                    <h3 className="text-xl font-bold text-shop_dark_green mb-3">
-                      {value.title}
-                    </h3>
-                    <p className="text-dark-text leading-relaxed">
-                      {value.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {values.map((value, index) => {
+              const Icon = value.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="h-full hover:shadow-lg transition-all group cursor-pointer border-0 bg-white">
+                    <CardContent className="p-6 text-center">
+                      <Icon
+                        className={`w-12 h-12 mx-auto mb-4 ${value.color} group-hover:scale-110 transition-transform`}
+                      />
+                      <h3 className="text-xl font-bold text-[#2d2a7d] mb-3">
+                        {value.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed text-sm">
+                        {value.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </Container>
       </section>
 
-      {/* Team Section */}
-      <section className="py-20">
+      {/* ===== PORQUÊ ESCOLHER-NOS ===== */}
+      <section className="py-20 bg-white">
         <Container className="max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -249,54 +329,66 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <Badge className="mb-4 bg-shop_light_green/10 text-shop_dark_green hover:bg-shop_light_green/20">
-              Leadership Team
+            <Badge className="mb-4 bg-[#fbbf24]/20 text-[#b45309] hover:bg-[#fbbf24]/30 border-0">
+              Vantagens
             </Badge>
-            <h2 className="text-4xl font-bold text-shop_dark_green mb-4">
-              Meet the Minds Behind ShopCart
+            <h2 className="text-4xl font-bold text-[#2d2a7d] mb-4">
+              Porquê Escolher a E.D.S TECH?
             </h2>
-            <p className="text-lg text-dark-text max-w-2xl mx-auto">
-              Our passionate team of experts working tirelessly to create the
-              best shopping experience for you.
-            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="text-center hover:shadow-lg transition-all group">
-                  <CardContent className="p-6">
-                    <div className="w-24 h-24 bg-gradient-to-br from-shop_light_green to-shop_dark_green rounded-full mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-105 transition-transform">
-                      {member.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </div>
-                    <h3 className="text-xl font-bold text-shop_dark_green mb-1">
-                      {member.name}
-                    </h3>
-                    <Badge className="mb-3 bg-shop_orange/10 text-shop_orange border-none">
-                      {member.role}
-                    </Badge>
-                    <p className="text-dark-text text-sm leading-relaxed">
-                      {member.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {[
+              {
+                icon: Award,
+                title: "Técnicos Certificados",
+                description:
+                  "Equipa especializada com formação profissional e anos de experiência.",
+              },
+              {
+                icon: Zap,
+                title: "Atendimento Rápido",
+                description:
+                  "Resposta rápida e intervenção em tempo recorde em Maputo e Matola.",
+              },
+              {
+                icon: Star,
+                title: "Garantia de Qualidade",
+                description:
+                  "Todos os serviços são executados com garantia e acompanhamento.",
+              },
+            ].map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <Card className="h-full border-2 border-[#2d2a7d]/10 hover:border-[#e30613]/30 transition-all">
+                    <CardContent className="p-8 text-center">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-[#2d2a7d] to-[#e30613] rounded-full flex items-center justify-center">
+                        <Icon className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-xl font-bold text-[#2d2a7d] mb-3">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </Container>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-shop_dark_green to-shop_light_green text-white">
+      {/* ===== CTA FINAL ===== */}
+      <section className="py-20 bg-gradient-to-r from-[#2d2a7d] to-[#e30613] text-white">
         <Container className="max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -305,31 +397,35 @@ const AboutPage = () => {
             className="text-center"
           >
             <h2 className="text-4xl font-bold mb-4">
-              Ready to Experience the Difference?
+              Precisa de um Serviço Técnico?
             </h2>
             <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Join thousands of satisfied customers who trust ShopCart for their
-              shopping needs.
+              Fale connosco pelo WhatsApp e receba um orçamento grátis em
+              minutos.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                asChild
-                size="lg"
-                className="bg-white text-shop_dark_green hover:bg-white/90"
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Link href="/shop">
-                  Start Shopping <ShoppingBag className="w-5 h-5 ml-2" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                className="bg-white text-shop_dark_green hover:bg-white/90"
-              >
-                <Link href="/contact">
-                  Contact Us <ArrowRight className="w-5 h-5 ml-2" />
-                </Link>
-              </Button>
+                <Button
+                  size="lg"
+                  className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold"
+                >
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Pedir Orçamento Grátis
+                </Button>
+              </a>
+              <Link href="/contact">
+                <Button
+                  size="lg"
+                  className="bg-white text-[#2d2a7d] hover:bg-white/90"
+                >
+                  Outros Contactos
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
             </div>
           </motion.div>
         </Container>

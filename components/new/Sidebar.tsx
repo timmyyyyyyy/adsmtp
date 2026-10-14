@@ -3,17 +3,13 @@ import {
   Home,
   ShoppingBag,
   BookOpen,
-  Flame,
-  User,
   ShoppingCart,
   Heart,
-  Package,
-  Tag,
   Phone,
-  HelpCircle,
   Info,
   Grid3X3,
-  Logs,
+  MessageCircle,
+  Wrench,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { FC } from "react";
@@ -23,7 +19,6 @@ import Link from "next/link";
 import { useOutsideClick } from "@/hooks";
 import SocialMedia from "../common/SocialMedia";
 import { categoriesData } from "@/constants";
-import { ClerkLoaded, SignedIn } from "@clerk/nextjs";
 import useStore from "@/store";
 
 interface SidebarProps {
@@ -36,32 +31,31 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
   const sidebarRef = useOutsideClick<HTMLDivElement>(onClose);
   const { items, favoriteProduct } = useStore();
 
-  // Enhanced menu sections with icons
-  const userMenuItems = [
-    { title: "My Account", href: "/account", icon: User },
-    { title: "My Orders", href: "/orders", icon: Package },
-    { title: "Wishlist", href: "/wishlist", icon: Heart },
-    { title: "Shopping Cart", href: "/cart", icon: ShoppingCart },
+  const whatsappUrl =
+    "https://wa.me/258844974637?text=Ol%C3%A1!%20Gostaria%20de%20mais%20informa%C3%A7%C3%B5es.";
+
+  const quickAccessItems = [
+    { title: "Carrinho", href: "/cart", icon: ShoppingCart, color: "text-[#fbbf24]" },
+    { title: "Favoritos", href: "/wishlist", icon: Heart, color: "text-pink-400" },
+    { title: "Loja", href: "/shop", icon: ShoppingBag, color: "text-[#25D366]" },
   ];
 
   const mainMenuItems = [
-    { title: "Home", href: "/", icon: Home },
-    { title: "Shop", href: "/shop", icon: ShoppingBag },
-    { title: "Categories", href: "/category", icon: Grid3X3 },
-    { title: "Brands", href: "/brands", icon: Tag },
+    { title: "Início", href: "/", icon: Home },
+    { title: "Serviços", href: "/help", icon: Wrench },
+    { title: "Loja", href: "/shop", icon: ShoppingBag },
+    { title: "Categorias", href: "/category", icon: Grid3X3 },
     { title: "Blog", href: "/blog", icon: BookOpen },
-    { title: "Hot Deal", href: "/deal", icon: Flame },
   ];
 
   const supportMenuItems = [
-    { title: "Help Center", href: "/help", icon: HelpCircle },
-    { title: "Customer Service", href: "/support", icon: Phone },
-    { title: "About Us", href: "/about", icon: Info },
+    { title: "Fale Connosco", href: "/contact", icon: Phone },
+    { title: "Sobre Nós", href: "/about", icon: Info },
   ];
 
   return (
     <div
-      className={`fixed inset-y-0 h-screen left-0 z-50 w-full bg-primary/50 shadow-xl transform ${
+      className={`fixed inset-y-0 h-screen left-0 z-50 w-full bg-black/50 shadow-xl transform ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       } transition-transform ease-in-out duration-300`}
     >
@@ -70,106 +64,60 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.3 }}
         ref={sidebarRef}
-        className="min-w-72 max-w-96 bg-black z-50 h-screen text-primary-foreground p-6 border-r border-r-shop_dark_green flex flex-col gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-shop_dark_green scrollbar-track-transparent"
+        className="min-w-72 max-w-96 bg-[#0f0f1a] z-50 h-screen text-white p-6 border-r border-[#2d2a7d] flex flex-col gap-4 overflow-y-auto scrollbar-thin scrollbar-thumb-[#2d2a7d] scrollbar-track-transparent"
       >
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-shop_dark_green">
+        <div className="flex items-center justify-between pb-4 border-b border-[#2d2a7d]">
           <Logo className="text-white" />
           <button
             onClick={onClose}
-            className="hover:text-shop_light_green hoverEffect p-2 rounded-md hover:bg-shop_dark_green/30"
+            className="hover:text-[#fbbf24] transition-all p-2 rounded-md hover:bg-[#2d2a7d]/30"
           >
             <X size={20} />
           </button>
         </div>
 
-        {/* Mobile Quick Actions */}
+        {/* Acesso Rápido */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-shop_light_green uppercase tracking-wider">
-            Quick Access
+          <h3 className="text-sm font-semibold text-[#fbbf24] uppercase tracking-wider">
+            Acesso Rápido
           </h3>
           <div className="grid grid-cols-3 gap-3">
-            {/* Shopping Cart */}
-            <Link
-              onClick={onClose}
-              href="/cart"
-              className="flex flex-col items-center gap-2 p-3 rounded-lg bg-shop_dark_green/30 hover:bg-shop_dark_green/50 transition-colors duration-200 text-center relative"
-            >
-              <ShoppingCart size={20} className="text-shop_light_green" />
-              <span className="text-xs font-medium text-zinc-300">Cart</span>
-              {items?.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-shop_btn_dark_green text-white h-4 w-4 rounded-full text-xs font-semibold flex items-center justify-center">
-                  {items.length}
-                </span>
-              )}
-            </Link>
-
-            {/* Wishlist */}
-            <Link
-              onClick={onClose}
-              href="/wishlist"
-              className="flex flex-col items-center gap-2 p-3 rounded-lg bg-shop_dark_green/30 hover:bg-shop_dark_green/50 transition-colors duration-200 text-center relative"
-            >
-              <Heart size={20} className="text-pink-400" />
-              <span className="text-xs font-medium text-zinc-300">
-                Wishlist
-              </span>
-              {favoriteProduct?.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-pink-500 text-white h-4 w-4 rounded-full text-xs font-semibold flex items-center justify-center">
-                  {favoriteProduct.length}
-                </span>
-              )}
-            </Link>
-
-            {/* Orders */}
-            <ClerkLoaded>
-              <SignedIn>
-                <Link
-                  onClick={onClose}
-                  href="/user/orders"
-                  className="flex flex-col items-center gap-2 p-3 rounded-lg bg-shop_dark_green/30 hover:bg-shop_dark_green/50 transition-colors duration-200 text-center"
-                >
-                  <Logs size={20} className="text-blue-400" />
-                  <span className="text-xs font-medium text-zinc-300">
-                    Orders
-                  </span>
-                </Link>
-              </SignedIn>
-            </ClerkLoaded>
-          </div>
-        </div>
-
-        {/* User Section */}
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-shop_light_green uppercase tracking-wider">
-            My Account
-          </h3>
-          <div className="flex flex-col gap-2">
-            {userMenuItems.map((item) => {
+            {quickAccessItems.map((item) => {
               const Icon = item.icon;
+              const count =
+                item.href === "/cart"
+                  ? items?.length || 0
+                  : item.href === "/wishlist"
+                  ? favoriteProduct?.length || 0
+                  : 0;
+
               return (
                 <Link
-                  onClick={onClose}
                   key={item.title}
+                  onClick={onClose}
                   href={item.href}
-                  className={`flex items-center gap-3 p-2 rounded-md text-sm font-medium tracking-wide transition-all duration-200 hover:text-shop_light_green hover:bg-shop_dark_green/30 ${
-                    pathname === item.href
-                      ? "text-shop_light_green bg-shop_dark_green/50"
-                      : "text-zinc-300"
-                  }`}
+                  className="flex flex-col items-center gap-2 p-3 rounded-lg bg-[#2d2a7d]/30 hover:bg-[#2d2a7d]/50 transition-colors duration-200 text-center relative"
                 >
-                  <Icon size={18} />
-                  {item.title}
+                  <Icon size={20} className={item.color} />
+                  <span className="text-xs font-medium text-gray-300">
+                    {item.title}
+                  </span>
+                  {count > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-[#e30613] text-white h-4 w-4 rounded-full text-xs font-semibold flex items-center justify-center">
+                      {count}
+                    </span>
+                  )}
                 </Link>
               );
             })}
           </div>
         </div>
 
-        {/* Main Navigation */}
+        {/* Navegação */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-shop_light_green uppercase tracking-wider">
-            Navigation
+          <h3 className="text-sm font-semibold text-[#fbbf24] uppercase tracking-wider">
+            Navegação
           </h3>
           <div className="flex flex-col gap-2">
             {mainMenuItems.map((item) => {
@@ -179,10 +127,10 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                   onClick={onClose}
                   key={item.title}
                   href={item.href}
-                  className={`flex items-center gap-3 p-2 rounded-md text-sm font-medium tracking-wide transition-all duration-200 hover:text-shop_light_green hover:bg-shop_dark_green/30 ${
+                  className={`flex items-center gap-3 p-2 rounded-md text-sm font-medium tracking-wide transition-all duration-200 hover:text-[#fbbf24] hover:bg-[#2d2a7d]/30 ${
                     pathname === item.href
-                      ? "text-shop_light_green bg-shop_dark_green/50"
-                      : "text-zinc-300"
+                      ? "text-[#fbbf24] bg-[#2d2a7d]/50"
+                      : "text-gray-300"
                   }`}
                 >
                   <Icon size={18} />
@@ -193,10 +141,10 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Categories Section */}
+        {/* Categorias Populares */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-shop_light_green uppercase tracking-wider">
-            Popular Categories
+          <h3 className="text-sm font-semibold text-[#fbbf24] uppercase tracking-wider">
+            Categorias Populares
           </h3>
           <div className="flex flex-col gap-1">
             {categoriesData.slice(0, 6).map((item) => (
@@ -204,7 +152,7 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                 onClick={onClose}
                 key={item.title}
                 href={`/category/${item.href}`}
-                className="text-xs font-medium text-zinc-400 hover:text-shop_light_green transition-colors duration-200 py-1.5 px-2 rounded hover:bg-shop_dark_green/20 capitalize"
+                className="text-xs font-medium text-gray-400 hover:text-[#fbbf24] transition-colors duration-200 py-1.5 px-2 rounded hover:bg-[#2d2a7d]/20 capitalize"
               >
                 {item.title}
               </Link>
@@ -212,46 +160,48 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
             <Link
               onClick={onClose}
               href="/category"
-              className="text-xs font-semibold text-shop_orange hover:text-shop_light_orange transition-colors duration-200 py-1.5 px-2 rounded hover:bg-shop_dark_green/20 mt-1"
+              className="text-xs font-semibold text-[#e30613] hover:text-[#fbbf24] transition-colors duration-200 py-1.5 px-2 rounded hover:bg-[#2d2a7d]/20 mt-1"
             >
-              View All Categories →
+              Ver Todas as Categorias →
             </Link>
           </div>
         </div>
 
-        {/* Quick Actions */}
+        {/* Ações Rápidas */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-shop_light_green uppercase tracking-wider">
-            Quick Actions
+          <h3 className="text-sm font-semibold text-[#fbbf24] uppercase tracking-wider">
+            Ações Rápidas
           </h3>
           <div className="grid grid-cols-2 gap-2">
-            <Link
+            <a
               onClick={onClose}
-              href="/deal"
-              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-shop_dark_green/30 hover:bg-shop_dark_green/50 transition-colors duration-200 text-center"
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-[#25D366]/20 hover:bg-[#25D366]/40 transition-colors duration-200 text-center"
             >
-              <Flame size={20} className="text-shop_orange" />
-              <span className="text-xs font-medium text-zinc-300">
-                Hot Deals
+              <MessageCircle size={20} className="text-[#25D366]" />
+              <span className="text-xs font-medium text-gray-300">
+                WhatsApp
               </span>
-            </Link>
+            </a>
             <Link
               onClick={onClose}
               href="/wishlist"
-              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-shop_dark_green/30 hover:bg-shop_dark_green/50 transition-colors duration-200 text-center"
+              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-[#2d2a7d]/30 hover:bg-[#2d2a7d]/50 transition-colors duration-200 text-center"
             >
-              <Heart size={20} className="text-shop_light_green" />
-              <span className="text-xs font-medium text-zinc-300">
-                Wishlist
+              <Heart size={20} className="text-pink-400" />
+              <span className="text-xs font-medium text-gray-300">
+                Favoritos
               </span>
             </Link>
           </div>
         </div>
 
-        {/* Support Section */}
+        {/* Suporte */}
         <div className="space-y-3">
-          <h3 className="text-sm font-semibold text-shop_light_green uppercase tracking-wider">
-            Support
+          <h3 className="text-sm font-semibold text-[#fbbf24] uppercase tracking-wider">
+            Suporte
           </h3>
           <div className="flex flex-col gap-2">
             {supportMenuItems.map((item) => {
@@ -261,10 +211,10 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
                   onClick={onClose}
                   key={item.title}
                   href={item.href}
-                  className={`flex items-center gap-3 p-2 rounded-md text-sm font-medium tracking-wide transition-all duration-200 hover:text-shop_light_green hover:bg-shop_dark_green/30 ${
+                  className={`flex items-center gap-3 p-2 rounded-md text-sm font-medium tracking-wide transition-all duration-200 hover:text-[#fbbf24] hover:bg-[#2d2a7d]/30 ${
                     pathname === item.href
-                      ? "text-shop_light_green bg-shop_dark_green/50"
-                      : "text-zinc-300"
+                      ? "text-[#fbbf24] bg-[#2d2a7d]/50"
+                      : "text-gray-300"
                   }`}
                 >
                   <Icon size={18} />
@@ -275,30 +225,32 @@ const Sidebar: FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-shop_dark_green my-2"></div>
+        {/* Divisor */}
+        <div className="border-t border-[#2d2a7d] my-2"></div>
 
-        {/* Promotional Banner */}
-        <div className="bg-gradient-to-r from-shop_dark_green to-shop_btn_dark_green rounded-lg p-4 text-center">
-          <h4 className="text-sm font-bold text-shop_light_green mb-1">
-            Special Offer!
+        {/* Banner Promocional */}
+        <div className="bg-gradient-to-r from-[#2d2a7d] to-[#e30613] rounded-lg p-4 text-center">
+          <h4 className="text-sm font-bold text-white mb-1">
+            Orçamento Grátis!
           </h4>
-          <p className="text-xs text-zinc-300 mb-2">
-            Get 20% off on your first order
+          <p className="text-xs text-white/90 mb-2">
+            Peça já o seu orçamento sem compromisso
           </p>
-          <Link
+          <a
             onClick={onClose}
-            href="/deal"
-            className="inline-block text-xs font-semibold text-white bg-shop_orange hover:bg-shop_light_orange px-3 py-1 rounded-full transition-colors duration-200"
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block text-xs font-semibold text-white bg-[#25D366] hover:bg-[#1da851] px-3 py-1 rounded-full transition-colors duration-200"
           >
-            Shop Now
-          </Link>
+            Falar no WhatsApp
+          </a>
         </div>
 
-        {/* Social Media */}
+        {/* Redes Sociais */}
         <div className="mt-4">
-          <h3 className="text-sm font-semibold text-shop_light_green uppercase tracking-wider mb-3">
-            Follow Us
+          <h3 className="text-sm font-semibold text-[#fbbf24] uppercase tracking-wider mb-3">
+            Siga-nos
           </h3>
           <SocialMedia />
         </div>

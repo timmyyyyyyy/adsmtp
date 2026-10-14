@@ -307,7 +307,7 @@ const FAQPage = () => {
               <CardHeader>
                 <CardTitle className="text-shop_dark_green flex items-center gap-2">
                   <HelpCircle className="w-5 h-5" />
-                  Categories
+                  Categorias
                 </CardTitle>
                 <CardDescription>Browse by topic</CardDescription>
               </CardHeader>
@@ -385,8 +385,7 @@ const FAQPage = () => {
                     No results found
                   </h3>
                   <p className="text-gray-500 mb-6">
-                    Try adjusting your search terms or browse different
-                    categories.
+                    Tente ajustar os seus termos de pesquisa ou navegue por categorias diferentes.
                   </p>
                   <Button
                     onClick={() => {
@@ -396,7 +395,7 @@ const FAQPage = () => {
                     variant="outline"
                     className="border-shop_light_green text-shop_light_green hover:bg-shop_light_green hover:text-white"
                   >
-                    Clear Search
+                    Limpar Pesquisas
                   </Button>
                 </motion.div>
               )}

@@ -7,7 +7,14 @@ import { client } from "@/sanity/lib/client";
 import HomeTabbar from "./HomeTabbar";
 import { productType } from "@/constants";
 import NoProductAvailable from "./product/NoProductAvailable";
-import { Grid3X3, LayoutGrid, List, Filter, SortAsc, Eye } from "lucide-react";
+import {
+  Grid3X3,
+  LayoutGrid,
+  List,
+  Filter,
+  SortAsc,
+  Eye,
+} from "lucide-react";
 import Container from "./Container";
 import { ALL_PRODUCTS_QUERYResult } from "@/sanity.types";
 import { Button } from "@/components/ui/button";
@@ -34,6 +41,8 @@ type SortOption =
   | "price-desc"
   | "newest";
 
+const MAX_PRICE = 100000;
+
 const ProductGrid = () => {
   const [products, setProducts] = useState<ALL_PRODUCTS_QUERYResult>([]);
   const [filteredProducts, setFilteredProducts] =
@@ -44,16 +53,9 @@ const ProductGrid = () => {
   const [sortBy, setSortBy] = useState<SortOption>("name-asc");
   const [showFilters, setShowFilters] = useState(false);
   const [productsPerPage] = useState(20);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState([0, MAX_PRICE]);
   const [stockStatus, setStockStatus] = useState<string>("all");
   const [rating, setRating] = useState<string>("all");
-
-  const query = `*[_type == "product" && variant == $variant] | order(${getSortQuery(
-    sortBy
-  )}){
-  ...,"categories": categories[]->title
-}`;
-  const params = { variant: selectedTab.toLowerCase() };
 
   function getSortQuery(sort: SortOption): string {
     switch (sort) {
@@ -72,6 +74,23 @@ const ProductGrid = () => {
     }
   }
 
+  // ✅ Encontra o slug correto no productType
+  const selectedSlug = productType.find(
+    (t) => t.title.toLowerCase() === selectedTab.toLowerCase()
+  )?.value;
+
+  // ✅ Query: filtra por slug da categoria
+  const query =
+    selectedSlug === "all"
+      ? `*[_type == "product"] | order(${getSortQuery(sortBy)}){
+          ...,"categories": categories[]->title
+        }`
+      : `*[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)] | order(${getSortQuery(sortBy)}){
+          ...,"categories": categories[]->title
+        }`;
+
+  const params = selectedSlug === "all" ? {} : { slug: selectedSlug };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -80,7 +99,7 @@ const ProductGrid = () => {
         setProducts(await response);
         setFilteredProducts(await response);
       } catch (error) {
-        console.log("Product fetching Error", error);
+        console.log("Erro ao carregar produtos", error);
       } finally {
         setLoading(false);
       }
@@ -88,12 +107,11 @@ const ProductGrid = () => {
     fetchData();
   }, [selectedTab, sortBy]);
 
-  // Apply filters to products
+  // Aplicar filtros
   const applyFilters = () => {
     let filtered = [...products];
 
-    // Filter by price range
-    if (priceRange[0] > 0 || priceRange[1] < 1000) {
+    if (priceRange[0] > 0 || priceRange[1] < MAX_PRICE) {
       filtered = filtered.filter((product) => {
         const price = product.price || 0;
         const finalPrice = product.discount
@@ -103,7 +121,6 @@ const ProductGrid = () => {
       });
     }
 
-    // Filter by stock status
     if (stockStatus !== "all") {
       filtered = filtered.filter((product) => {
         if (stockStatus === "in-stock") {
@@ -115,20 +132,17 @@ const ProductGrid = () => {
       });
     }
 
-    // Filter by status (using status as a proxy for "rating/quality")
     if (rating !== "all") {
       filtered = filtered.filter((product) => {
-        if (rating === "5") {
-          return product.status === "hot"; // Hot products = 5 stars
-        } else if (rating === "4") {
-          return product.status === "hot" || product.status === "new"; // Hot or New = 4+ stars
-        } else if (rating === "3") {
+        if (rating === "5") return product.status === "hot";
+        if (rating === "4")
+          return product.status === "hot" || product.status === "new";
+        if (rating === "3")
           return (
             product.status === "hot" ||
             product.status === "new" ||
             product.status === "sale"
-          ); // All products = 3+ stars
-        }
+          );
         return true;
       });
     }
@@ -136,7 +150,6 @@ const ProductGrid = () => {
     setFilteredProducts(filtered);
   };
 
-  // Auto-apply filters when filter values change
   useEffect(() => {
     applyFilters();
   }, [products, priceRange, stockStatus, rating]);
@@ -173,8 +186,8 @@ const ProductGrid = () => {
       onClick={() => setViewMode(mode)}
       className={`p-2 hoverEffect ${
         viewMode === mode
-          ? "bg-shop_light_green hover:bg-shop_dark_green border-shop_light_green"
-          : "hover:border-shop_light_green hover:text-shop_light_green"
+          ? "bg-[#2d2a7d] hover:bg-[#e30613] border-[#2d2a7d] text-white"
+          : "hover:border-[#2d2a7d] hover:text-[#2d2a7d]"
       }`}
       title={label}
     >
@@ -184,117 +197,111 @@ const ProductGrid = () => {
 
   return (
     <Container className="flex flex-col lg:px-0 mt-16 lg:mt-24">
-      {/* Header Section */}
+      {/* Header */}
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-3 mb-4">
-          <div className="h-1 w-12 bg-gradient-to-r from-shop_light_green to-shop_dark_green rounded-full"></div>
-          <h2 className="text-3xl lg:text-4xl font-bold text-dark-color">
-            Featured Products
+          <div className="h-1 w-12 bg-gradient-to-r from-[#2d2a7d] to-[#e30613] rounded-full"></div>
+          <h2 className="text-3xl lg:text-4xl font-bold text-[#2d2a7d]">
+            Produtos em Destaque
           </h2>
-          <div className="h-1 w-12 bg-gradient-to-l from-shop_light_green to-shop_dark_green rounded-full"></div>
+          <div className="h-1 w-12 bg-gradient-to-l from-[#2d2a7d] to-[#e30613] rounded-full"></div>
         </div>
-        <p className="text-light-color text-lg max-w-2xl mx-auto">
-          Discover our carefully curated selection of premium products
+        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          Veja quais são os nossos produtos em destaque.
         </p>
       </div>
 
-      {/* Enhanced Controls Section */}
-      <div className="bg-white rounded-2xl shadow-lg border border-shop_light_green/10 p-6 mb-8">
-        {/* Tab Bar */}
+      {/* Controls */}
+      <div className="bg-white rounded-2xl shadow-lg border border-[#2d2a7d]/10 p-6 mb-8">
         <HomeTabbar selectedTab={selectedTab} onTabSelect={setSelectedTab} />
 
-        {/* Advanced Controls */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mt-6 pt-6 border-t border-gray-100">
-          {/* Left Side - View Options */}
           <div className="flex items-center gap-4">
-            {/* View Mode Selector */}
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-dark-color hidden sm:block">
-                View:
+              <span className="text-sm font-medium text-[#2d2a7d] hidden sm:block">
+                Ver:
               </span>
               <div className="flex items-center gap-1">
                 <ViewModeButton
                   mode="grid-2"
                   icon={<Grid3X3 size={16} />}
-                  label="2 Columns"
+                  label="2 Colunas"
                 />
                 <ViewModeButton
                   mode="grid-3"
                   icon={<LayoutGrid size={16} />}
-                  label="3 Columns"
+                  label="3 Colunas"
                 />
                 <ViewModeButton
                   mode="grid-4"
                   icon={<LayoutGrid size={16} />}
-                  label="4 Columns"
+                  label="4 Colunas"
                 />
                 <ViewModeButton
                   mode="grid-5"
                   icon={<LayoutGrid size={16} />}
-                  label="5 Columns"
+                  label="5 Colunas"
                 />
                 <ViewModeButton
                   mode="list"
                   icon={<List size={16} />}
-                  label="List View"
+                  label="Vista em Lista"
                 />
               </div>
             </div>
 
-            {/* Filter Toggle */}
             <Button
               variant={showFilters ? "default" : "outline"}
               size="sm"
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center gap-2 hoverEffect ${
                 showFilters
-                  ? "bg-shop_light_green hover:bg-shop_dark_green border-shop_light_green"
-                  : "hover:border-shop_light_green hover:text-shop_light_green"
+                  ? "bg-[#2d2a7d] hover:bg-[#e30613] border-[#2d2a7d] text-white"
+                  : "hover:border-[#2d2a7d] hover:text-[#2d2a7d]"
               }`}
             >
               <Filter size={16} />
-              <span className="hidden sm:inline">Filters</span>
+              <span className="hidden sm:inline">Filtros</span>
             </Button>
           </div>
 
-          {/* Right Side - Sort and Info */}
           <div className="flex items-center gap-4">
-            {/* Sort Selector */}
             <div className="flex items-center gap-2">
-              <SortAsc size={16} className="text-light-color" />
+              <SortAsc size={16} className="text-gray-500" />
               <Select
                 value={sortBy}
                 onValueChange={(value) => setSortBy(value as SortOption)}
               >
-                <SelectTrigger className="w-48 border-gray-200 focus:border-shop_light_green">
-                  <SelectValue placeholder="Sort by..." />
+                <SelectTrigger className="w-48 border-gray-200 focus:border-[#2d2a7d]">
+                  <SelectValue placeholder="Ordenar por..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="name-asc">Name (A-Z)</SelectItem>
-                  <SelectItem value="name-desc">Name (Z-A)</SelectItem>
-                  <SelectItem value="price-asc">Price (Low to High)</SelectItem>
-                  <SelectItem value="price-desc">
-                    Price (High to Low)
+                  <SelectItem value="name-asc">Nome (A-Z)</SelectItem>
+                  <SelectItem value="name-desc">Nome (Z-A)</SelectItem>
+                  <SelectItem value="price-asc">
+                    Preço (Menor para Maior)
                   </SelectItem>
-                  <SelectItem value="newest">Newest First</SelectItem>
+                  <SelectItem value="price-desc">
+                    Preço (Maior para Menor)
+                  </SelectItem>
+                  <SelectItem value="newest">Mais Recentes</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Products Count */}
-            <div className="flex items-center gap-2 text-sm text-light-color">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
               <Eye size={16} />
               <Badge
                 variant="secondary"
-                className="bg-shop_light_pink text-shop_dark_green"
+                className="bg-[#2d2a7d]/10 text-[#2d2a7d]"
               >
-                {filteredProducts.length} products
+                {filteredProducts.length} produtos
               </Badge>
             </div>
           </div>
         </div>
 
-        {/* Expandable Filters Section */}
+        {/* Filtros Avançados */}
         <AnimatePresence>
           {showFilters && (
             <motion.div
@@ -305,39 +312,39 @@ const ProductGrid = () => {
               className="overflow-hidden"
             >
               <Separator className="my-6" />
-              <Card className="border-shop_light_green/20 bg-gradient-to-br from-white via-shop_light_bg/30 to-shop_light_pink/20">
+              <Card className="border-[#2d2a7d]/20 bg-gradient-to-br from-white via-gray-50/30 to-[#2d2a7d]/5">
                 <CardContent className="p-6">
                   <div className="mb-6">
-                    <h3 className="text-lg font-bold text-dark-color flex items-center gap-2 mb-2">
-                      🎯 Advanced Filters
+                    <h3 className="text-lg font-bold text-[#2d2a7d] flex items-center gap-2 mb-2">
+                      🎯 Filtros Avançados
                     </h3>
-                    <p className="text-sm text-light-color">
-                      Fine-tune your search to find exactly what you&apos;re
-                      looking for
+                    <p className="text-sm text-gray-500">
+                      Refine a sua pesquisa para encontrar exatamente o que
+                      procura
                     </p>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {/* Price Range Filter */}
-                    <div className="space-y-4 p-4 bg-white rounded-xl border border-shop_light_green/10 shadow-sm">
-                      <Label className="text-sm font-bold text-dark-color flex items-center gap-2">
-                        💰 Price Range
+                    {/* Preço */}
+                    <div className="space-y-4 p-4 bg-white rounded-xl border border-[#2d2a7d]/10 shadow-sm">
+                      <Label className="text-sm font-bold text-[#2d2a7d]">
+                        💰 Intervalo de Preço
                       </Label>
                       <div className="space-y-4">
                         <div className="px-2">
                           <Slider
                             value={priceRange}
                             onValueChange={setPriceRange}
-                            max={1000}
+                            max={MAX_PRICE}
                             min={0}
-                            step={10}
+                            step={100}
                             className="w-full"
                           />
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="flex-1">
-                            <Label className="text-xs text-light-color">
-                              Min Price
+                            <Label className="text-xs text-gray-500">
+                              Preço Mínimo
                             </Label>
                             <Input
                               type="number"
@@ -349,207 +356,130 @@ const ProductGrid = () => {
                                   priceRange[1],
                                 ])
                               }
-                              className="h-9 border-gray-200 focus:border-shop_light_green"
+                              className="h-9"
                             />
                           </div>
-                          <div className="text-light-color font-bold pt-5">
-                            -
-                          </div>
+                          <div className="text-gray-400 font-bold pt-5">-</div>
                           <div className="flex-1">
-                            <Label className="text-xs text-light-color">
-                              Max Price
+                            <Label className="text-xs text-gray-500">
+                              Preço Máximo
                             </Label>
                             <Input
                               type="number"
-                              placeholder="1000"
+                              placeholder={MAX_PRICE.toString()}
                               value={priceRange[1]}
                               onChange={(e) =>
                                 setPriceRange([
                                   priceRange[0],
-                                  parseInt(e.target.value) || 1000,
+                                  parseInt(e.target.value) || MAX_PRICE,
                                 ])
                               }
-                              className="h-9 border-gray-200 focus:border-shop_light_green"
+                              className="h-9"
                             />
                           </div>
                         </div>
                         <div className="text-center">
-                          <Badge className="bg-shop_light_green/20 text-shop_dark_green border-shop_light_green/30">
-                            ${priceRange[0]} - ${priceRange[1]}
+                          <Badge className="bg-[#2d2a7d]/10 text-[#2d2a7d] border-[#2d2a7d]/30">
+                            {priceRange[0].toLocaleString("pt-MZ")} -{" "}
+                            {priceRange[1].toLocaleString("pt-MZ")} MT
                           </Badge>
                         </div>
                       </div>
                     </div>
 
-                    {/* Stock Status Filter */}
-                    <div className="space-y-4 p-4 bg-white rounded-xl border border-shop_light_green/10 shadow-sm">
-                      <Label className="text-sm font-bold text-dark-color flex items-center gap-2">
-                        📦 Stock Status
+                    {/* Stock */}
+                    <div className="space-y-4 p-4 bg-white rounded-xl border border-[#2d2a7d]/10 shadow-sm">
+                      <Label className="text-sm font-bold text-[#2d2a7d]">
+                        📦 Estado do Stock
                       </Label>
                       <Select
                         value={stockStatus}
                         onValueChange={setStockStatus}
                       >
-                        <SelectTrigger className="border-gray-200 focus:border-shop_light_green h-10">
-                          <SelectValue placeholder="Select status..." />
+                        <SelectTrigger className="h-10">
+                          <SelectValue placeholder="Selecionar estado..." />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">
                             <span className="flex items-center gap-2">
                               <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                              All Products
+                              Todos os Produtos
                             </span>
                           </SelectItem>
                           <SelectItem value="in-stock">
                             <span className="flex items-center gap-2">
                               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                              In Stock
+                              Em Stock
                             </span>
                           </SelectItem>
                           <SelectItem value="out-of-stock">
                             <span className="flex items-center gap-2">
                               <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                              Out of Stock
+                              Sem Stock
                             </span>
                           </SelectItem>
                         </SelectContent>
                       </Select>
-                      {stockStatus && stockStatus !== "all" && (
-                        <div className="text-center">
-                          <Badge
-                            variant="outline"
-                            className="w-fit border-shop_light_green/30"
-                          >
-                            {stockStatus === "in-stock"
-                              ? "✅ In Stock Only"
-                              : "❌ Out of Stock Only"}
-                          </Badge>
-                        </div>
-                      )}
                     </div>
 
-                    {/* Quality Filter */}
-                    <div className="space-y-4 p-4 bg-white rounded-xl border border-shop_light_green/10 shadow-sm">
-                      <Label className="text-sm font-bold text-dark-color flex items-center gap-2">
-                        🏆 Product Quality
+                    {/* Qualidade */}
+                    <div className="space-y-4 p-4 bg-white rounded-xl border border-[#2d2a7d]/10 shadow-sm">
+                      <Label className="text-sm font-bold text-[#2d2a7d]">
+                        🏆 Qualidade do Produto
                       </Label>
                       <Select value={rating} onValueChange={setRating}>
-                        <SelectTrigger className="border-gray-200 focus:border-shop_light_green h-10">
-                          <SelectValue placeholder="Select quality..." />
+                        <SelectTrigger className="h-10">
+                          <SelectValue placeholder="Selecionar qualidade..." />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="all">
                             <span className="flex items-center gap-2">
-                              🛍️ All Products
+                              🛍️ Todos os Produtos
                             </span>
                           </SelectItem>
                           <SelectItem value="5">
                             <span className="flex items-center gap-2">
-                              🔥 Hot Products (Premium)
+                              🔥 Produtos Hot (Premium)
                             </span>
                           </SelectItem>
                           <SelectItem value="4">
                             <span className="flex items-center gap-2">
-                              ✨ New & Hot (High Quality)
+                              ✨ Novos & Hot
                             </span>
                           </SelectItem>
                           <SelectItem value="3">
                             <span className="flex items-center gap-2">
-                              🛍️ All Available (Standard+)
+                              🛍️ Todos Disponíveis
                             </span>
                           </SelectItem>
                         </SelectContent>
                       </Select>
-                      {rating && rating !== "all" && (
-                        <div className="text-center">
-                          <Badge
-                            variant="outline"
-                            className="w-fit border-shop_orange/30 text-shop_orange"
-                          >
-                            {rating === "5"
-                              ? "🔥 Premium Only"
-                              : rating === "4"
-                              ? "✨ High Quality+"
-                              : "🛍️ Standard+"}
-                          </Badge>
-                        </div>
-                      )}
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="flex flex-col gap-3 justify-end p-4 bg-gradient-to-br from-shop_light_pink/20 to-shop_light_bg/30 rounded-xl border border-shop_light_green/10">
-                      <div className="text-center mb-2">
-                        <Label className="text-sm font-bold text-dark-color">
-                          Quick Actions
-                        </Label>
-                      </div>
+                    {/* Ações */}
+                    <div className="flex flex-col gap-3 justify-end p-4 bg-gradient-to-br from-[#2d2a7d]/5 to-[#e30613]/5 rounded-xl border border-[#2d2a7d]/10">
+                      <Label className="text-sm font-bold text-[#2d2a7d] text-center">
+                        Ações Rápidas
+                      </Label>
                       <Button
-                        className="w-full bg-gradient-to-r from-shop_light_green to-shop_dark_green hover:from-shop_dark_green hover:to-shop_light_green text-white font-semibold shadow-lg hover:shadow-xl hoverEffect transform hover:-translate-y-0.5"
-                        onClick={() => {
-                          applyFilters();
-                        }}
+                        className="w-full bg-[#2d2a7d] hover:bg-[#e30613] text-white font-semibold"
+                        onClick={() => applyFilters()}
                       >
-                        ✨ Apply Filters ({filteredProducts.length})
+                        ✨ Aplicar Filtros ({filteredProducts.length})
                       </Button>
                       <Button
                         variant="outline"
-                        className="w-full border-shop_light_green/30 hover:border-shop_light_green hover:bg-shop_light_green/10 text-shop_dark_green hoverEffect"
+                        className="w-full border-[#2d2a7d]/30 hover:bg-[#2d2a7d]/10 text-[#2d2a7d]"
                         onClick={() => {
-                          setPriceRange([0, 1000]);
+                          setPriceRange([0, MAX_PRICE]);
                           setStockStatus("all");
                           setRating("all");
                         }}
                       >
-                        🗑️ Clear Filters
+                        🗑️ Limpar Filtros
                       </Button>
                     </div>
                   </div>
-
-                  {/* Active Filters Display */}
-                  {(priceRange[0] > 0 ||
-                    priceRange[1] < 1000 ||
-                    (stockStatus && stockStatus !== "all") ||
-                    (rating && rating !== "all")) && (
-                    <div className="mt-6 pt-4 border-t border-gray-100">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-medium text-dark-color">
-                          Active Filters:
-                        </span>
-                        {(priceRange[0] > 0 || priceRange[1] < 1000) && (
-                          <Badge
-                            variant="secondary"
-                            className="bg-shop_light_pink text-shop_dark_green"
-                          >
-                            Price: ${priceRange[0]} - ${priceRange[1]}
-                          </Badge>
-                        )}
-                        {stockStatus && stockStatus !== "all" && (
-                          <Badge
-                            variant="secondary"
-                            className="bg-shop_light_pink text-shop_dark_green"
-                          >
-                            Stock:{" "}
-                            {stockStatus === "in-stock"
-                              ? "In Stock"
-                              : "Out of Stock"}
-                          </Badge>
-                        )}
-                        {rating && rating !== "all" && (
-                          <Badge
-                            variant="secondary"
-                            className="bg-shop_light_pink text-shop_dark_green"
-                          >
-                            Quality:{" "}
-                            {rating === "5"
-                              ? "🔥 Premium"
-                              : rating === "4"
-                              ? "✨ High Quality"
-                              : "🛍️ Standard+"}
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  )}
                 </CardContent>
               </Card>
             </motion.div>
@@ -557,7 +487,7 @@ const ProductGrid = () => {
         </AnimatePresence>
       </div>
 
-      {/* Products Grid */}
+      {/* Grid */}
       {loading ? (
         <ProductGridSkeleton />
       ) : filteredProducts?.length ? (
@@ -588,14 +518,14 @@ const ProductGrid = () => {
         <NoProductAvailable selectedTab={selectedTab} />
       )}
 
-      {/* Load More Section */}
+      {/* Load More */}
       {filteredProducts?.length > productsPerPage && (
         <div className="text-center mt-12">
           <Button
             size="lg"
-            className="px-8 py-3 bg-gradient-to-r from-shop_light_green to-shop_dark_green text-white font-semibold rounded-full hover:shadow-lg transform hover:-translate-y-1 hoverEffect"
+            className="px-8 py-3 bg-[#2d2a7d] hover:bg-[#e30613] text-white font-semibold rounded-full"
           >
-            Load More Products
+            Carregar Mais Produtos
           </Button>
         </div>
       )}

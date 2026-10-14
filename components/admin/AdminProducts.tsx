@@ -227,7 +227,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
         </h3>
         <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:gap-2 sm:space-y-0">
           <Input
-            placeholder="Search products..."
+            placeholder="Pesquisar Produtos..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full sm:w-48"
@@ -283,7 +283,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
                           colSpan={7}
                           className="text-center py-8 text-muted-foreground"
                         >
-                          No products found.
+                          Sem Produtos Encotrados
                         </TableCell>
                       </TableRow>
                     ) : (
@@ -374,7 +374,7 @@ const AdminProducts: React.FC<AdminProductsProps> = ({
             {products.length === 0 ? (
               <Card>
                 <div className="p-8 text-center text-muted-foreground">
-                  No products found.
+                  Sem Produtos Encotrados
                 </div>
               </Card>
             ) : (

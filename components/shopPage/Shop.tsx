@@ -3,9 +3,17 @@ import { BRANDS_QUERYResult, Category, Product } from "@/sanity.types";
 import { client } from "@/sanity/lib/client";
 import React, { useEffect, useState, useCallback } from "react";
 import Container from "../Container";
-import Title from "../Title";
 import CategoryList from "./CategoryList";
-import { Loader2, Filter, X } from "lucide-react";
+import {
+  Filter,
+  X,
+  Check,
+  Truck,
+  ShieldCheck,
+  Lock,
+  Headset,
+  CreditCard,
+} from "lucide-react";
 import ProductCard from "../ProductCard";
 import NoProductAvailable from "../product/NoProductAvailable";
 import BrandList from "./BrandList";
@@ -29,12 +37,19 @@ const Shop = ({ categories, brands }: Props) => {
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // 🔥 TEMPORÁRIO: categorias de teste enquanto Sanity não carrega
+  const testCategories = categories?.length > 0 ? categories : [
+    { _id: "1", title: "Ar-Condicionado", slug: { current: "ar-condicionado" } },
+    { _id: "2", title: "Refrigeração", slug: { current: "refrigeracao" } },
+    { _id: "3", title: "Segurança Eletrónica", slug: { current: "seguranca-eletronica" } },
+    { _id: "4", title: "Internet Starlink", slug: { current: "internet-starlink" } },
+  ];
+
   const fetchProducts = useCallback(async () => {
     setLoading(true);
     try {
-      // Extract min and max price from selectedPrice
       let minPrice = 0;
-      let maxPrice = 10000; // Default high value
+      let maxPrice = 10000000;
 
       if (selectedPrice) {
         const [min, max] = selectedPrice.split("-").map(Number);
@@ -42,24 +57,19 @@ const Shop = ({ categories, brands }: Props) => {
         maxPrice = max;
       }
       const query = `
-      *[_type == 'product' 
-        && (!defined($selectedCategory) || references(*[_type == "category" && slug.current == $selectedCategory]._id))
-        && (!defined($selectedBrand) || references(*[_type == "brand" && slug.current == $selectedBrand]._id))
-        && price >= $minPrice && price <= $maxPrice
-      ] 
-      | order(name asc) {
-        ...,"categories": categories[]->title
-      }
-    `;
+        *[_type == 'product' 
+          && (!defined($selectedCategory) || references(*[_type == "category" && slug.current == $selectedCategory]._id))
+          && (!defined($selectedBrand) || references(*[_type == "brand" && slug.current == $selectedBrand]._id))
+          && price >= $minPrice && price <= $maxPrice
+        ] 
+        | order(name asc) {
+          ...,"categories": categories[]->title
+        }
+      `;
 
       const data = await client.fetch(
         query,
-        {
-          selectedCategory,
-          selectedBrand,
-          minPrice,
-          maxPrice,
-        },
+        { selectedCategory, selectedBrand, minPrice, maxPrice },
         { next: { revalidate: 0 } }
       );
       setProducts(data);
@@ -69,100 +79,44 @@ const Shop = ({ categories, brands }: Props) => {
       setLoading(false);
     }
   }, [selectedCategory, selectedBrand, selectedPrice]);
+
   useEffect(() => {
     fetchProducts();
   }, [selectedCategory, selectedBrand, selectedPrice]);
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Container className="py-6">
-        {/* Header Section */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-            <div>
-              <Title className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                Shop Products
-              </Title>
-              <p className="text-gray-600 text-sm">
-                Discover amazing products tailored to your needs
-              </p>
-            </div>
-            {(selectedCategory !== null ||
-              selectedBrand !== null ||
-              selectedPrice !== null) && (
-              <button
-                onClick={() => {
-                  setSelectedCategory(null);
-                  setSelectedBrand(null);
-                  setSelectedPrice(null);
-                }}
-                className="inline-flex items-center px-4 py-2 bg-red-50 text-red-700 border border-red-200 rounded-md hover:bg-red-100 transition-colors duration-200 text-sm font-medium"
-              >
-                Clear All Filters
-              </button>
-            )}
-          </div>
-
-          {/* Active Filters Display */}
-          {(selectedCategory || selectedBrand || selectedPrice) && (
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <div className="flex flex-wrap gap-2">
-                <span className="text-sm font-medium text-gray-700 mr-2">
-                  Active filters:
-                </span>
-                {selectedCategory && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                    Category:{" "}
-                    {
-                      categories?.find(
-                        (cat) => cat?.slug?.current === selectedCategory
-                      )?.title
-                    }
-                  </span>
-                )}
-                {selectedBrand && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                    Brand:{" "}
-                    {
-                      brands?.find(
-                        (brand) => brand?.slug?.current === selectedBrand
-                      )?.title
-                    }
-                  </span>
-                )}
-                {selectedPrice && (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                    Price: ${selectedPrice.replace("-", " - $")}
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
+      {/* Hero */}
+      <div className="relative bg-shop_dark_green text-white py-12 lg:py-16 mb-8 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -top-20 -right-20 w-80 h-80 bg-shop_orange rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-shop_light_green rounded-full blur-3xl"></div>
         </div>
+        <Container className="relative z-10">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Loja Online</h1>
+            <div className="w-24 h-1 bg-shop_orange mx-auto mb-5 rounded-full"></div>
+            <p className="text-white/90 text-base md:text-lg max-w-2xl mx-auto">
+              Produtos de qualidade com garantia e entrega rápida em Maputo e Matola.
+            </p>
+          </div>
+        </Container>
+      </div>
 
-        {/* Mobile Filter Toggle */}
+      <Container className="py-6">
+        {/* Mobile Toggle */}
         <div className="lg:hidden mb-4">
           <button
             onClick={() => setShowMobileFilters(!showMobileFilters)}
-            className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-shop_dark_green transition-colors duration-200"
+            className="inline-flex items-center justify-center w-full px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
           >
             <Filter className="w-4 h-4 mr-2" />
-            {showMobileFilters ? "Hide Filters" : "Show Filters"}
-            {(selectedCategory || selectedBrand || selectedPrice) && (
-              <span className="ml-2 bg-shop_dark_green text-white text-xs px-2 py-1 rounded-full">
-                {
-                  [selectedCategory, selectedBrand, selectedPrice].filter(
-                    Boolean
-                  ).length
-                }
-              </span>
-            )}
+            {showMobileFilters ? "Ocultar Filtros" : "Mostrar Filtros"}
           </button>
         </div>
 
-        {/* <div className="flex flex-col lg:flex-row gap-6" /> */}
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Mobile Filter Overlay */}
+          {/* Mobile Overlay */}
           {showMobileFilters && (
             <div className="fixed inset-0 z-50 lg:hidden">
               <div
@@ -170,117 +124,160 @@ const Shop = ({ categories, brands }: Props) => {
                 onClick={() => setShowMobileFilters(false)}
               />
               <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-xl shadow-xl max-h-[80vh] overflow-y-auto">
-                <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Filters
-                  </h3>
-                  <button
-                    onClick={() => setShowMobileFilters(false)}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
-                  >
+                <div className="p-4 border-b flex items-center justify-between">
+                  <h3 className="text-lg font-semibold">Filtros</h3>
+                  <button onClick={() => setShowMobileFilters(false)}>
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y">
                   <CategoryList
-                    categories={categories}
+                    categories={testCategories as any}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                   />
-                  <BrandList
-                    brands={brands}
-                    setSelectedBrand={setSelectedBrand}
-                    selectedBrand={selectedBrand}
-                  />
+
                   <PriceList
                     setSelectedPrice={setSelectedPrice}
                     selectedPrice={selectedPrice}
                   />
-                </div>
-                <div className="p-4 border-t border-gray-200 bg-gray-50">
-                  <button
-                    onClick={() => setShowMobileFilters(false)}
-                    className="w-full bg-shop_dark_green text-white py-3 px-4 rounded-lg font-medium hover:bg-shop_dark_green/90 transition-colors duration-200"
-                  >
-                    Apply Filters
-                  </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Desktop Sidebar Filters */}
-          <div className="hidden lg:block lg:w-80 flex-shrink-0">
-            <div className="sticky top-6 space-y-4">
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-4 bg-gray-50 border-b border-gray-200">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Filters
+          {/* Desktop Sidebar */}
+          <div className="hidden lg:block lg:w-72 flex-shrink-0">
+            <div className="sticky top-24 space-y-4">
+              {/* Categorias */}
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-shop_orange text-white px-4 py-3 flex items-center gap-2">
+                  <Filter className="w-5 h-5" />
+                  <h3 className="text-sm font-bold uppercase tracking-wider">
+                    Categorias
                   </h3>
                 </div>
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y">
                   <CategoryList
-                    categories={categories}
+                    categories={testCategories as any}
                     selectedCategory={selectedCategory}
                     setSelectedCategory={setSelectedCategory}
                   />
-                  <BrandList
-                    brands={brands}
-                    setSelectedBrand={setSelectedBrand}
-                    selectedBrand={selectedBrand}
-                  />
-                  <PriceList
-                    setSelectedPrice={setSelectedPrice}
-                    selectedPrice={selectedPrice}
-                  />
                 </div>
+              </div>
+
+              {/* Porquê */}
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div className="bg-shop_orange text-white px-4 py-3 flex items-center gap-2">
+                  <Check className="w-5 h-5" />
+                  <h3 className="text-sm font-bold uppercase tracking-wider">
+                    Porquê comprar connosco?
+                  </h3>
+                </div>
+                <ul className="p-4 space-y-3 text-sm">
+                  {[
+                    "Produtos 100% Originais",
+                    "Garantia de Qualidade",
+                    "Entrega Rápida",
+                    "Assistência Técnica",
+                    "Pagamento na Entrega",
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-shop_orange flex-shrink-0" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Marcas + Preços */}
+              <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <BrandList
+                  brands={brands}
+                  setSelectedBrand={setSelectedBrand}
+                  selectedBrand={selectedBrand}
+                />
+                <PriceList
+                  setSelectedPrice={setSelectedPrice}
+                  selectedPrice={selectedPrice}
+                />
               </div>
             </div>
           </div>
 
           {/* Main Content */}
           <div className="flex-1 min-w-0">
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="p-4 sm:p-6">
-                {loading ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {Array.from({ length: 8 }).map((_, index) => (
-                      <div
-                        key={index}
-                        className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden animate-pulse"
-                      >
-                        <div className="aspect-square bg-gray-200"></div>
-                        <div className="p-4 space-y-3">
-                          <div className="h-3 bg-gray-200 rounded w-3/4"></div>
-                          <div className="h-4 bg-gray-200 rounded w-full"></div>
-                          <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-                          <div className="h-8 bg-gray-200 rounded w-full"></div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : products?.length > 0 ? (
-                  <div>
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 pb-4 border-b border-gray-100">
-                      <h2 className="text-lg font-semibold text-gray-900 mb-2 sm:mb-0">
-                        {products.length} Product
-                        {products.length !== 1 ? "s" : ""} Found
-                      </h2>
-                      <div className="text-sm text-gray-600">
-                        Showing all available products
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                      {products?.map((product) => (
-                        <ProductCard key={product?._id} product={product} />
-                      ))}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+              <p className="text-sm text-gray-600">
+                Exibindo{" "}
+                <span className="font-semibold text-shop_dark_green">
+                  {products.length > 0 ? 1 : 0}–{products.length}
+                </span>{" "}
+                de{" "}
+                <span className="font-semibold text-shop_dark_green">
+                  {products.length}
+                </span>{" "}
+                produtos
+              </p>
+              <select className="text-sm border border-gray-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:border-shop_orange">
+                <option>Ordenar por: Mais recentes</option>
+                <option>Preço: Menor para Maior</option>
+                <option>Preço: Maior para Menor</option>
+                <option>Nome: A-Z</option>
+              </select>
+            </div>
+
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-lg shadow-sm overflow-hidden animate-pulse"
+                  >
+                    <div className="aspect-square bg-gray-200"></div>
+                    <div className="p-4 space-y-3">
+                      <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-4 bg-gray-200 rounded w-full"></div>
+                      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
                     </div>
                   </div>
-                ) : (
-                  <div className="py-12">
-                    <NoProductAvailable className="bg-transparent" />
-                  </div>
-                )}
+                ))}
+              </div>
+            ) : products?.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                {products.map((product) => (
+                  <ProductCard key={product?._id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <div className="py-12">
+                <NoProductAvailable className="bg-transparent" />
+              </div>
+            )}
+
+            {/* Rodapé Benefícios */}
+            <div className="mt-10 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
+                {[
+                  { icon: Truck, title: "ENTREGA RÁPIDA", sub: "Maputo e Matola" },
+                  { icon: ShieldCheck, title: "GARANTIA", sub: "Produtos com garantia" },
+                  { icon: Lock, title: "COMPRA SEGURA", sub: "Seus dados protegidos" },
+                  { icon: Headset, title: "SUPORTE TÉCNICO", sub: "Assistência especializada" },
+                  { icon: CreditCard, title: "PAGAMENTO", sub: "Na entrega ou transferência" },
+                ].map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.title} className="flex flex-col items-center gap-2">
+                      <div className="w-10 h-10 rounded-full bg-shop_light_bg flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-shop_dark_green" />
+                      </div>
+                      <h4 className="text-xs font-bold text-shop_dark_green">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-gray-500 leading-tight">{item.sub}</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

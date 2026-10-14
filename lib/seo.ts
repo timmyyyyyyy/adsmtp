@@ -306,7 +306,7 @@ export function generateHomeMetadata(): Metadata {
   return {
     title: "ShopCart - Your Trusted Online Shopping Destination",
     description:
-      "Discover amazing products at ShopCart, your trusted online shopping destination for quality items and exceptional customer service. Shop electronics, fashion, home goods and more with fast delivery.",
+      "Discover amazing proDescubra produtos incríveis na E.D.S-Tech, o seu destino de compras Atrasves do Whatsapp com confiança para artigos de qualidade e um atendimento ao cliente excepcional",
     keywords: [
       "online shopping",
       "e-commerce",
@@ -322,7 +322,7 @@ export function generateHomeMetadata(): Metadata {
       url: BASE_URL,
       title: "ShopCart - Your Trusted Online Shopping Destination",
       description:
-        "Discover amazing products at ShopCart. Shop electronics, fashion, home goods and more with fast delivery.",
+        "Descubra Produtos Incríveis",
       images: [
         {
           url: "/og-image.jpg",
@@ -336,7 +336,7 @@ export function generateHomeMetadata(): Metadata {
       card: "summary_large_image",
       title: "ShopCart - Your Trusted Online Shopping Destination",
       description:
-        "Discover amazing products at ShopCart. Shop electronics, fashion, home goods and more.",
+        "Descubra Produtos Incríveis",
       images: ["/og-image.jpg"],
     },
     alternates: {

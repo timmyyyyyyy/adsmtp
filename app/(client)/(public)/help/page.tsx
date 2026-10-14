@@ -1,23 +1,21 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "motion/react";
 import {
-  Mail,
+  MessageCircle,
   Phone,
-  MessageSquare,
   Clock,
-  ChevronRight,
-  Search,
-  ShoppingBag,
-  CreditCard,
-  Truck,
-  RotateCcw,
+  Snowflake,
   Shield,
-  BookOpen,
-  Video,
+  Zap,
+  Satellite,
+  Plug,
+  Building2,
+  Wrench,
+  Sun,
+  Wind,
+  Mail,
 } from "lucide-react";
-import Link from "next/link";
 import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,195 +27,189 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 const HelpPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const whatsappNumber = "258844974637";
+  const whatsappBase = `https://wa.me/${whatsappNumber}`;
 
-  const helpCategories = [
+  const getWhatsApp = (message: string) =>
+    `${whatsappBase}?text=${encodeURIComponent(message)}`;
+
+  // ===== SERVIÇOS DA E.D.S TECH =====
+  const services = [
     {
-      title: "Getting Started",
-      icon: BookOpen,
-      description: "Learn the basics of shopping with us",
-      color: "from-shop_light_green to-shop_dark_green",
-      links: [
-        { title: "How to Create an Account", href: "/faq#account-1" },
-        { title: "Placing Your First Order", href: "/faq#shopping-1" },
-        { title: "Setting Up Payment Methods", href: "/faq#payment-1" },
-        { title: "Managing Your Profile", href: "/faq#account-3" },
-      ],
+      title: "Refrigeração e Climatização",
+      icon: Snowflake,
+      description:
+        "Instalação e manutenção de sistemas de refrigeração e climatização.",
+      color: "from-blue-500 to-blue-700",
+      message: "Olá! Gostaria de um orçamento para Refrigeração e Climatização.",
     },
     {
-      title: "Orders & Shopping",
-      icon: ShoppingBag,
-      description: "Everything about placing and managing orders",
-      color: "from-shop_orange to-shop_light_orange",
-      links: [
-        { title: "How to Place an Order", href: "/faq#shopping-1" },
-        { title: "Modifying Your Order", href: "/faq#shopping-2" },
-        { title: "Order Tracking", href: "/faq#shopping-3" },
-        { title: "Out of Stock Items", href: "/faq#shopping-4" },
-      ],
+      title: "Ar-Condicionado",
+      icon: Wind,
+      description:
+        "Venda, instalação e manutenção de ar-condicionado de todas as marcas.",
+      color: "from-cyan-500 to-cyan-700",
+      message: "Olá! Gostaria de um orçamento para Ar-Condicionado.",
     },
     {
-      title: "Payments & Billing",
-      icon: CreditCard,
-      description: "Payment methods, billing, and refunds",
-      color: "from-light-blue to-dark-blue",
-      links: [
-        { title: "Accepted Payment Methods", href: "/faq#payment-1" },
-        { title: "Payment Security", href: "/faq#payment-2" },
-        { title: "When You&apos;ll Be Charged", href: "/faq#payment-3" },
-        { title: "Refunds & Returns", href: "/faq#payment-4" },
-      ],
-    },
-    {
-      title: "Shipping & Delivery",
-      icon: Truck,
-      description: "Shipping options, costs, and delivery info",
-      color: "from-shop_light_green to-light-green",
-      links: [
-        { title: "Shipping Costs", href: "/faq#shipping-1" },
-        { title: "Delivery Times", href: "/faq#shipping-2" },
-        { title: "International Shipping", href: "/faq#shipping-3" },
-        { title: "Lost or Damaged Packages", href: "/faq#shipping-4" },
-      ],
-    },
-    {
-      title: "Returns & Exchanges",
-      icon: RotateCcw,
-      description: "Return policy, exchanges, and refunds",
-      color: "from-dark-red to-light-orange",
-      links: [
-        { title: "Return Policy", href: "/faq#returns-1" },
-        { title: "How to Return Items", href: "/faq#returns-2" },
-        { title: "Refund Timeline", href: "/faq#returns-3" },
-        { title: "Exchanges", href: "/faq#returns-4" },
-      ],
-    },
-    {
-      title: "Account & Security",
+      title: "Segurança Eletrónica",
       icon: Shield,
-      description: "Account management and security features",
-      color: "from-shop_dark_green to-shop_btn_dark_green",
-      links: [
-        { title: "Account Security", href: "/faq#account-1" },
-        { title: "Password Reset", href: "/faq#account-2" },
-        { title: "Update Information", href: "/faq#account-3" },
-        { title: "Delete Account", href: "/faq#account-4" },
-      ],
+      description:
+        "Câmaras de vigilância (CCTV), alarmes e controlo de acesso.",
+      color: "from-red-500 to-red-700",
+      message: "Olá! Gostaria de um orçamento para Segurança Eletrónica (CCTV).",
+    },
+    {
+      title: "Vedação Elétrica",
+      icon: Zap,
+      description:
+        "Soluções profissionais para proteção e vedação de instalações elétricas.",
+      color: "from-yellow-500 to-orange-600",
+      message: "Olá! Gostaria de um orçamento para Vedação Elétrica.",
+    },
+    {
+      title: "Internet Starlink",
+      icon: Satellite,
+      description:
+        "Instalação e configuração de internet via satélite Starlink.",
+      color: "from-indigo-500 to-indigo-700",
+      message: "Olá! Gostaria de um orçamento para Internet Starlink.",
+    },
+    {
+      title: "Energia Solar",
+      icon: Sun,
+      description:
+        "Sistemas solares fotovoltaicos para residências e empresas.",
+      color: "from-amber-500 to-yellow-600",
+      message: "Olá! Gostaria de um orçamento para Energia Solar.",
+    },
+    {
+      title: "Instalações Elétricas",
+      icon: Plug,
+      description:
+        "Projetos e execução de instalações elétricas residenciais e comerciais.",
+      color: "from-orange-500 to-red-600",
+      message: "Olá! Gostaria de um orçamento para Instalações Elétricas.",
+    },
+    {
+      title: "Ferramentas",
+      icon: Wrench,
+      description:
+        "Venda de ferramentas profissionais para todas as áreas técnicas.",
+      color: "from-gray-500 to-gray-700",
+      message: "Olá! Gostaria de saber mais sobre as Ferramentas disponíveis.",
+    },
+    {
+      title: "Facility Management",
+      icon: Building2,
+      description:
+        "Gestão integrada de serviços e manutenção de instalações.",
+      color: "from-emerald-500 to-emerald-700",
+      message: "Olá! Gostaria de um orçamento para Facility Management.",
     },
   ];
 
+  // ===== QUICK ACTIONS =====
   const quickActions = [
     {
-      title: "Track Your Order",
-      description: "Check the status of your recent purchases",
-      icon: Search,
-      action: "Track Order",
-      href: "/orders",
-      color: "bg-shop_light_green",
+      title: "Pedir Orçamento",
+      description: "Solicite um orçamento grátis para qualquer serviço",
+      icon: MessageCircle,
+      action: "Pedir via WhatsApp",
+      href: getWhatsApp("Olá! Gostaria de pedir um orçamento."),
+      color: "bg-[#25D366]",
+      external: true,
     },
     {
-      title: "Contact Support",
-      description: "Get help from our customer service team",
-      icon: MessageSquare,
-      action: "Contact Us",
-      href: "/contact",
-      color: "bg-shop_orange",
+      title: "Suporte Técnico",
+      description: "Assistência técnica especializada para os seus equipamentos",
+      icon: Phone,
+      action: "Ligar Agora",
+      href: "tel:+258844974637",
+      color: "bg-[#e30613]",
+      external: true,
     },
     {
-      title: "Return an Item",
-      description: "Start a return or exchange process",
-      icon: RotateCcw,
-      action: "Start Return",
-      href: "/orders",
-      color: "bg-dark-blue",
+      title: "Marcar Visita",
+      description: "Agende uma visita técnica em Maputo ou Matola",
+      icon: Clock,
+      action: "Marcar via WhatsApp",
+      href: getWhatsApp("Olá! Gostaria de agendar uma visita técnica."),
+      color: "bg-[#2d2a7d]",
+      external: true,
     },
   ];
 
+  // ===== CANAIS DE CONTACTO =====
   const supportChannels = [
     {
-      title: "Live Chat",
-      description: "Chat with our support team in real-time",
-      icon: MessageSquare,
-      availability: "24/7 Available",
-      response: "Instant response",
-      action: "Start Chat",
-      color:
-        "border-shop_light_green text-shop_light_green hover:bg-shop_light_green",
+      title: "WhatsApp",
+      description: "Fale connosco diretamente pelo WhatsApp",
+      icon: MessageCircle,
+      availability: "Segunda a Sábado",
+      response: "Resposta em minutos",
+      action: "Falar no WhatsApp",
+      color: "border-[#25D366] text-[#25D366] hover:bg-[#25D366]",
+      href: getWhatsApp("Olá! Gostaria de mais informações."),
+      external: true,
     },
     {
-      title: "Email Support",
-      description: "Send us a detailed message about your issue",
+      title: "E-mail",
+      description: "Envie-nos uma mensagem detalhada sobre o seu projeto.",
       icon: Mail,
-      availability: "Always Open",
-      response: "Within 2 hours",
-      action: "Send Email",
-      color: "border-shop_orange text-shop_orange hover:bg-shop_orange",
-      href: "/contact",
+      availability: "Sempre disponível",
+      response: "Resposta em 2 horas",
+      action: "Enviar E-mail",
+      color: "border-[#e30613] text-[#e30613] hover:bg-[#e30613]",
+      href: "mailto:edstechnology@tvcabo.co.mz",
+      external: true,
     },
     {
-      title: "Phone Support",
-      description: "Speak directly with a support representative",
+      title: "Telefone",
+      description: "Fale diretamente com um técnico especializado",
       icon: Phone,
-      availability: "Mon-Fri 9AM-6PM EST",
-      response: "Immediate",
-      action: "Call Now",
-      color: "border-dark-blue text-dark-blue hover:bg-dark-blue",
-      phone: "+1 (555) 123-4567",
+      availability: "Seg-Sex 07:30-17:30",
+      response: "Imediato",
+      action: "Ligar Agora",
+      color: "border-[#2d2a7d] text-[#2d2a7d] hover:bg-[#2d2a7d]",
+      href: "tel:+258844974637",
+      external: true,
     },
   ];
 
   return (
-    <div className="bg-gradient-to-b from-shop_light_bg to-white min-h-screen">
-      {/* Hero Banner Section */}
-      <section className="py-20 bg-gradient-to-r from-shop_dark_green to-shop_light_green text-white">
-        <Container className="max-w-6xl">
+    <div className="bg-gray-50 min-h-screen">
+      {/* ===== HERO ===== */}
+      <section className="relative py-20 bg-[#2d2a7d] text-white overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#e30613] rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#fbbf24] rounded-full blur-3xl"></div>
+        </div>
+        <Container className="relative z-10 max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
             <Badge className="mb-6 bg-white/20 text-white border-white/30 hover:bg-white/30">
-              24/7 Support
+              SERVIÇOS PROFISSIONAIS
             </Badge>
-            <h1 className="text-5xl lg:text-6xl font-bold mb-6">Help Center</h1>
+            <h1 className="text-5xl lg:text-6xl font-bold mb-6">
+              Nossos Serviços
+            </h1>
+            <div className="w-24 h-1 bg-[#e30613] mx-auto mb-6 rounded-full"></div>
             <p className="text-xl lg:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-              Find answers, get support, and resolve issues quickly. We&apos;re
-              here to help you have the best shopping experience.
+              Soluções técnicas em refrigeração, segurança eletrónica, energia
+              e muito mais. Peça já o seu orçamento grátis!
             </p>
           </motion.div>
         </Container>
       </section>
 
-      {/* Main Content */}
+      {/* ===== MAIN CONTENT ===== */}
       <Container className="py-12 lg:py-16">
-        {/* Search Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="max-w-2xl mx-auto mb-16"
-        >
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-6 h-6" />
-            <Input
-              type="text"
-              placeholder="Search for help topics, orders, or issues..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-14 py-6 text-lg border-2 border-gray-200 focus:border-shop_light_green rounded-xl shadow-sm"
-            />
-            <Button
-              className="absolute right-2 top-2 bg-shop_light_green hover:bg-shop_dark_green"
-              size="lg"
-            >
-              Search
-            </Button>
-          </div>
-        </motion.div>
-
         {/* Quick Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -225,8 +217,8 @@ const HelpPage = () => {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-shop_dark_green mb-8 text-center">
-            Quick Actions
+          <h2 className="text-2xl font-bold text-[#2d2a7d] mb-8 text-center">
+            Ações Rápidas
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {quickActions.map((action, index) => {
@@ -238,15 +230,19 @@ const HelpPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.1 * index }}
                 >
-                  <Link href={action.href}>
-                    <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer border-0 bg-white/70 backdrop-blur-sm">
+                  <a
+                    href={action.href}
+                    target={action.external ? "_blank" : undefined}
+                    rel={action.external ? "noopener noreferrer" : undefined}
+                  >
+                    <Card className="hover:shadow-lg transition-all duration-300 cursor-pointer border-0 bg-white">
                       <CardContent className="p-6 text-center">
                         <div
                           className={`inline-flex items-center justify-center w-16 h-16 ${action.color} rounded-full mb-4`}
                         >
                           <Icon className="w-8 h-8 text-white" />
                         </div>
-                        <h3 className="text-lg font-semibold text-shop_dark_green mb-2">
+                        <h3 className="text-lg font-semibold text-[#2d2a7d] mb-2">
                           {action.title}
                         </h3>
                         <p className="text-gray-600 mb-4">
@@ -254,65 +250,64 @@ const HelpPage = () => {
                         </p>
                         <Button
                           variant="outline"
-                          className="border-shop_light_green text-shop_light_green hover:bg-shop_light_green hover:text-white"
+                          className="border-[#e30613] text-[#e30613] hover:bg-[#e30613] hover:text-white"
                         >
                           {action.action}
                         </Button>
                       </CardContent>
                     </Card>
-                  </Link>
+                  </a>
                 </motion.div>
               );
             })}
           </div>
         </motion.div>
 
-        {/* Help Categories */}
+        {/* Serviços */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-shop_dark_green mb-8 text-center">
-            Browse Help Topics
+          <h2 className="text-2xl font-bold text-[#2d2a7d] mb-8 text-center">
+            Serviços que Oferecemos
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {helpCategories.map((category, index) => {
-              const Icon = category.icon;
+            {services.map((service, index) => {
+              const Icon = service.icon;
               return (
                 <motion.div
-                  key={category.title}
+                  key={service.title}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.05 * index }}
                 >
-                  <Card className="h-full hover:shadow-lg transition-all duration-300 border-0 bg-white/70 backdrop-blur-sm">
+                  <Card className="h-full hover:shadow-lg transition-all duration-300 border-0 bg-white">
                     <CardHeader>
                       <div
-                        className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${category.color} rounded-lg mb-3`}
+                        className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r ${service.color} rounded-lg mb-3`}
                       >
-                        <Icon className="w-6 h-6 text-white" />
+                        <Icon className="w-7 h-7 text-white" />
                       </div>
-                      <CardTitle className="text-shop_dark_green">
-                        {category.title}
+                      <CardTitle className="text-[#2d2a7d] text-lg">
+                        {service.title}
                       </CardTitle>
-                      <CardDescription>{category.description}</CardDescription>
+                      <CardDescription>{service.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-2">
-                      {category.links.map((link, linkIndex) => (
-                        <Link
-                          key={linkIndex}
-                          href={link.href}
-                          className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-100 transition-colors group"
-                        >
-                          <span className="text-sm text-gray-700 group-hover:text-shop_dark_green">
-                            {link.title}
-                          </span>
-                          <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-shop_light_green" />
-                        </Link>
-                      ))}
-                    </CardContent>
+                    <CardFooter>
+                      <a
+                        href={getWhatsApp(service.message)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full"
+                      >
+                        <Button className="w-full bg-[#25D366] hover:bg-[#1da851] text-white font-semibold">
+                          <MessageCircle className="w-4 h-4 mr-2" />
+                          Pedir Orçamento
+                        </Button>
+                      </a>
+                    </CardFooter>
                   </Card>
                 </motion.div>
               );
@@ -320,15 +315,15 @@ const HelpPage = () => {
           </div>
         </motion.div>
 
-        {/* Support Channels */}
+        {/* Canais de Contacto */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-shop_dark_green mb-8 text-center">
-            Get Personal Support
+          <h2 className="text-2xl font-bold text-[#2d2a7d] mb-8 text-center">
+            Fale Connosco
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {supportChannels.map((channel, index) => {
@@ -340,12 +335,12 @@ const HelpPage = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.1 * index }}
                 >
-                  <Card className="h-full text-center hover:shadow-lg transition-all duration-300 border-0 bg-white/70 backdrop-blur-sm">
+                  <Card className="h-full text-center hover:shadow-lg transition-all duration-300 border-0 bg-white">
                     <CardHeader>
                       <div className="inline-flex items-center justify-center w-14 h-14 bg-gray-100 rounded-full mb-4 mx-auto">
-                        <Icon className="w-7 h-7 text-gray-600" />
+                        <Icon className="w-7 h-7 text-[#2d2a7d]" />
                       </div>
-                      <CardTitle className="text-shop_dark_green">
+                      <CardTitle className="text-[#2d2a7d]">
                         {channel.title}
                       </CardTitle>
                       <CardDescription className="mb-4">
@@ -357,13 +352,15 @@ const HelpPage = () => {
                           {channel.availability}
                         </div>
                         <div className="text-sm text-gray-600">
-                          Response: {channel.response}
+                          {channel.response}
                         </div>
                       </div>
                     </CardHeader>
                     <CardFooter>
-                      <Link
-                        href={channel.href || "/contact"}
+                      <a
+                        href={channel.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="w-full"
                       >
                         <Button
@@ -372,7 +369,7 @@ const HelpPage = () => {
                         >
                           {channel.action}
                         </Button>
-                      </Link>
+                      </a>
                     </CardFooter>
                   </Card>
                 </motion.div>
@@ -381,47 +378,32 @@ const HelpPage = () => {
           </div>
         </motion.div>
 
-        {/* Additional Resources */}
+        {/* CTA Final */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <Card className="bg-gradient-to-r from-shop_light_green to-shop_dark_green text-white shadow-xl">
+          <Card className="bg-gradient-to-r from-[#2d2a7d] to-[#e30613] text-white shadow-xl border-0">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl mb-2">Need More Help?</CardTitle>
+              <CardTitle className="text-2xl mb-2">
+                Precisa de um Orçamento?
+              </CardTitle>
               <CardDescription className="text-white/80">
-                Explore our comprehensive resources and documentation
+                Fale connosco pelo WhatsApp e receba uma resposta em minutos
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center pb-8">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                <Link href="/faq">
-                  <Button
-                    variant="secondary"
-                    className="w-full bg-white text-shop_dark_green hover:bg-gray-100"
-                  >
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    View FAQ
-                  </Button>
-                </Link>
-                <Link href="/contact">
-                  <Button
-                    variant="outline"
-                    className="w-full border-white text-white hover:bg-white/10"
-                  >
-                    <Mail className="w-4 h-4 mr-2" />
-                    Contact Us
-                  </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  className="w-full border-white text-white hover:bg-white/10"
-                >
-                  <Video className="w-4 h-4 mr-2" />
-                  Video Guides
+              <a
+                href={getWhatsApp("Olá! Gostaria de pedir um orçamento.")}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button className="bg-[#25D366] hover:bg-[#1da851] text-white font-bold px-8 py-6 text-lg">
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Pedir Orçamento Grátis
                 </Button>
-              </div>
+              </a>
             </CardContent>
           </Card>
         </motion.div>
@@ -429,4 +411,5 @@ const HelpPage = () => {
     </div>
   );
 };
+
 export default HelpPage;

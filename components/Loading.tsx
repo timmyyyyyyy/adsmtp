@@ -1,35 +1,35 @@
 "use client";
 import Logo from "./common/Logo";
 import { motion } from "motion/react";
-import { ShoppingBag, Package, Truck, CheckCircle } from "lucide-react";
+import { Wrench, Snowflake, Satellite, CheckCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const Loading = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [loadingText, setLoadingText] = useState(
-    "Preparing your shopping experience..."
+    "Preparando a sua experiência."
   );
 
   const loadingSteps = [
     {
-      icon: ShoppingBag,
-      text: "Preparing your shopping experience...",
-      color: "text-shop_dark_green",
+      icon: Wrench,
+      text: "Preparando os nossos serviços...",
+      color: "text-[#2d2a7d]",
     },
     {
-      icon: Package,
-      text: "Loading products...",
-      color: "text-shop_light_green",
+      icon: Snowflake,
+      text: "A carregar soluções técnicas...",
+      color: "text-[#e30613]",
     },
     {
-      icon: Truck,
-      text: "Setting up delivery options...",
-      color: "text-shop_orange",
+      icon: Satellite,
+      text: "A preparar tudo para si...",
+      color: "text-[#fbbf24]",
     },
     {
       icon: CheckCircle,
-      text: "Almost ready!",
-      color: "text-shop_light_green",
+      text: "Quase pronto!",
+      color: "text-[#25D366]",
     },
   ];
 
@@ -48,9 +48,8 @@ const Loading = () => {
   const CurrentIcon = loadingSteps[currentStep].icon;
 
   return (
-    <div className="fixed min-h-screen w-full bg-shop_light_bg left-0 top-0 flex items-center justify-center z-50">
+    <div className="fixed min-h-screen w-full bg-[#f8f8fb] left-0 top-0 flex items-center justify-center z-50">
       <div className="flex flex-col justify-center items-center gap-8 max-w-md mx-auto px-6">
-        {/* Logo with enhanced animation */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -59,16 +58,15 @@ const Loading = () => {
           <Logo />
         </motion.div>
 
-        {/* Progress Dots */}
         <div className="flex space-x-3">
           {loadingSteps.map((_, index) => (
             <motion.div
               key={index}
               className={`w-3 h-3 rounded-full ${
                 index === currentStep
-                  ? "bg-shop_orange shadow-lg"
+                  ? "bg-[#e30613] shadow-lg"
                   : index < currentStep
-                  ? "bg-shop_light_green"
+                  ? "bg-[#2d2a7d]"
                   : "bg-gray-300"
               }`}
               animate={{
@@ -84,9 +82,7 @@ const Loading = () => {
           ))}
         </div>
 
-        {/* Main Loading Content */}
         <div className="text-center space-y-6">
-          {/* Animated Icon */}
           <motion.div
             key={currentStep}
             initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
@@ -95,9 +91,7 @@ const Loading = () => {
             transition={{ duration: 0.5 }}
             className="flex justify-center"
           >
-            <div
-              className={`p-4 rounded-full bg-white shadow-lg border-2 border-shop_light_green/20`}
-            >
+            <div className="p-4 rounded-full bg-white shadow-lg border-2 border-[#2d2a7d]/20">
               <CurrentIcon
                 className={`w-8 h-8 ${loadingSteps[currentStep].color}`}
                 strokeWidth={2}
@@ -105,7 +99,6 @@ const Loading = () => {
             </div>
           </motion.div>
 
-          {/* Loading Text */}
           <motion.div
             key={loadingText}
             initial={{ opacity: 0, y: 10 }}
@@ -114,18 +107,17 @@ const Loading = () => {
             transition={{ duration: 0.4 }}
             className="space-y-2"
           >
-            <h2 className="text-xl font-semibold text-shop_dark_green">
+            <h2 className="text-xl font-semibold text-[#2d2a7d]">
               {loadingText}
             </h2>
             <p className="text-sm text-gray-600">
-              Please wait while we set up everything for you
+              Por favor aguarde enquanto preparamos tudo para você
             </p>
           </motion.div>
 
-          {/* Progress Bar */}
           <div className="w-64 h-2 bg-gray-200 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-shop_light_green to-shop_orange rounded-full"
+              className="h-full bg-gradient-to-r from-[#2d2a7d] to-[#e30613] rounded-full"
               initial={{ width: "0%" }}
               animate={{
                 width: `${((currentStep + 1) / loadingSteps.length) * 100}%`,
@@ -134,14 +126,13 @@ const Loading = () => {
             />
           </div>
 
-          {/* Percentage */}
           <motion.p
-            className="text-sm font-medium text-shop_dark_green"
+            className="text-sm font-medium text-[#2d2a7d]"
             animate={{ opacity: [0.7, 1, 0.7] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
             {Math.round(((currentStep + 1) / loadingSteps.length) * 100)}%
-            Complete
+            Concluído
           </motion.p>
         </div>
       </div>
